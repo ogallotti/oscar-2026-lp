@@ -1,0 +1,10 @@
+[build]
+  publish = "."
+
+[images]
+  remote_images = ["https://.*"]
+
+[dev]
+  publish = "."
+  port = 3000
+  functionsPort = 4000
