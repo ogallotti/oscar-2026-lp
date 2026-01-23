@@ -208,8 +208,9 @@ img {
 
 @media (max-width: 768px) {
   .hero {
-    height: 100vh;
-    min-height: auto;
+    height: 100svh;
+    /* Use Small Viewport Height to fit initial screen with address bar */
+    min-height: 100svh;
   }
 }
 
