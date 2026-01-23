@@ -80,7 +80,8 @@ class Oscar3D {
         this.setupEventListeners();
 
         // Calculate initial scroll state immediately
-        this.onScroll();
+        // Initial resize
+        this.onResize();
 
         // Start animation
         this.animate();
@@ -246,7 +247,6 @@ class Oscar3D {
 
     setupEventListeners() {
         window.addEventListener('resize', () => this.onResize());
-        window.addEventListener('scroll', () => this.onScroll());
     }
 
     onResize() {

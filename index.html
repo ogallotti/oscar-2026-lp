@@ -8,9 +8,13 @@
   <meta name="description" content="Acompanhe a 98ª cerimônia do Oscar, honrando os melhores filmes de 2025.">
   <link rel="icon" type="image/png" href="/images/logo-icon.png">
 
+  <link rel="preload" href="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" as="image" fetchpriority="high">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="//connect.facebook.net">
   <link
     href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet">
@@ -21,8 +25,227 @@
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Critical CSS -->
+  <style>
+    :root {
+      --color-gold: #a98f37;
+      --color-gold-dark: #8c7325;
+      --color-gold-light: #cfb26f;
+      --color-dark: #171010;
+      --color-dark-soft: #1f1818;
+      --color-light: #ffffff;
+      --color-off-white: #fcfbf9;
+      --color-cream: #f2efe9;
+      --color-text-main: #171010;
+      --color-text-muted: #595555;
+      --color-text-light: #ffffff;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-serif-alt: 'Instrument Serif', serif;
+      --font-sans: 'Inter', sans-serif
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      font-size: 16px;
+      overflow-x: hidden
+    }
+
+    body {
+      min-height: 100vh;
+      line-height: 1.6;
+      font-family: var(--font-sans);
+      background-color: var(--color-off-white);
+      color: var(--color-text-main);
+      width: 100%;
+      overflow-x: hidden
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--color-dark)
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease
+    }
+
+    img {
+      width: 100%;
+      display: block
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative
+    }
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      background-color: var(--color-dark);
+      color: var(--color-text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden
+    }
+
+    @media (max-width:768px) {
+      .hero {
+        height: 100svh;
+        min-height: 100svh
+      }
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(60, 35, 25, 0.5) 0%, transparent 50%), radial-gradient(ellipse 100% 80% at 70% 80%, rgba(45, 25, 18, 0.4) 0%, transparent 60%), radial-gradient(ellipse 120% 100% at 50% 50%, #2a1a14 0%, #1a1010 40%, #0f0808 100%);
+      z-index: 0
+    }
+
+    .hero-text-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(15, 8, 8, 0.7) 0%, rgba(15, 8, 8, 0.4) 50%, transparent 100%);
+      z-index: 1;
+      pointer-events: none
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .hero-date {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--color-gold);
+      margin-bottom: 2.5rem
+    }
+
+    .hero-logo {
+      width: 60px;
+      height: auto;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4))
+    }
+
+    .hero-title-wrapper {
+      margin-bottom: 2.5rem
+    }
+
+    .hero-headline {
+      color: var(--color-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 0.95
+    }
+
+    .line-1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: -0.02em
+    }
+
+    .line-2 {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 400;
+      color: var(--color-gold-light)
+    }
+
+    .hero-subheadline {
+      font-weight: 300;
+      max-width: 500px;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent
+    }
+
+    .btn-gold-outline {
+      color: var(--color-gold-light);
+      border-color: var(--color-gold);
+      background: transparent
+    }
+
+    .btn.glow-gold {
+      box-shadow: 0 0 15px rgba(169, 143, 55, 0.4), 0 0 30px rgba(169, 143, 55, 0.2)
+    }
+
+    /* Hero Background Elements */
+    .particles-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1
+    }
+
+    .oscar-statue {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none
+    }
+
+    #oscar-3d-canvas {
+      width: 100%;
+      height: 100%;
+      display: block
+    }
+  </style>
+
+  <!-- Styles Async -->
+  <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="style.css">
+  </noscript>
 </head>
 
 <body>
@@ -42,7 +265,8 @@
     </div>
 
     <div class="container hero-content">
-      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo">
+      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" width="80" height="80" alt="Oscar Logo"
+        class="hero-logo" fetchpriority="high">
       <p class="hero-date">Domingo, 15 de Março de 2026</p>
 
       <div class="hero-title-wrapper">
@@ -87,8 +311,8 @@
         <div class="intro-visual" data-aos="fade-left" data-aos-delay="300">
           <!-- Stylized Frame -->
           <div class="visual-frame">
-            <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" alt="Conan O'Brien apresentando o Oscar"
-              class="intro-image">
+            <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" width="600" height="auto" loading="lazy"
+              alt="Conan O'Brien apresentando o Oscar" class="intro-image">
           </div>
         </div>
       </div>
@@ -273,7 +497,8 @@
             <div class="nominees-grid grid-posters">
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/625400-bugonia-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/625400-bugonia-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Bugonia</h4>
                   <p class="nominee-meta">Ed Guiney, Andrew Lowe, Yorgos Lanthimos, Emma Stone, Lars Knudsen</p>
@@ -281,7 +506,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/817977-f1-the-movie-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/817977-f1-the-movie-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">F1</h4>
                   <p class="nominee-meta">Chad Oman, Brad Pitt, Dede Gardner, Jeremy Kleiner, Joseph Kosinski, Jerry
@@ -290,7 +516,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/958100-frankenstein-2025-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/958100-frankenstein-2025-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Frankenstein</h4>
                   <p class="nominee-meta">Guillermo del Toro, J. Miles Dale, Scott Stuber</p>
@@ -298,7 +525,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/772232-hamnet-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/772232-hamnet-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Hamnet</h4>
                   <p class="nominee-meta">Liza Marshall, Pippa Harris, Nicolas Gonda, Steven Spielberg, Sam Mendes</p>
@@ -306,7 +534,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1197499-marty-supreme-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1197499-marty-supreme-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Marty Supreme</h4>
                   <p class="nominee-meta">Eli Bush, Ronald Bronstein, Josh Safdie, Anthony Katagas, Timothée Chalamet
@@ -315,7 +544,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/951277-one-battle-after-another-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/951277-one-battle-after-another-0-460-0-690-crop.jpg&w=460&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">One Battle after Another</h4>
@@ -324,7 +553,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1104348-the-secret-agent-2025-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1104348-the-secret-agent-2025-0-460-0-690-crop.jpg&w=460&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">The Secret Agent</h4>
@@ -333,7 +562,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1013357-sentimental-value-2025-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1013357-sentimental-value-2025-0-460-0-690-crop.jpg&w=460&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Sentimental Value</h4>
@@ -342,7 +571,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1116600-sinners-2025-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1116600-sinners-2025-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Sinners</h4>
                   <p class="nominee-meta">Zinzi Coogler, Sev Ohanian, Ryan Coogler</p>
@@ -350,7 +580,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1125383-train-dreams-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1125383-train-dreams-0-460-0-690-crop.jpg&w=460&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Train Dreams</h4>
                   <p class="nominee-meta">Marissa McMahon, Teddy Schwarzman, Will Janowitz, Ashley Schlaifer, Michael
@@ -731,7 +962,8 @@
           <h3 class="governors-column-title text-center" data-aos="fade-up">Oscar Honorário</h3>
           <div class="governors-grid">
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="100">
-              <div class="governor-image-rect" style="background-image: url('images/governors_debbie_allen.png');">
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_debbie_allen.png&w=600&q=80');">
               </div>
               <div class="governor-info">
                 <h4 class="governor-name">Debbie Allen</h4>
@@ -739,7 +971,9 @@
               </div>
             </div>
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="200">
-              <div class="governor-image-rect" style="background-image: url('images/governors_tom_cruise.png');"></div>
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_tom_cruise.png&w=600&q=80');">
+              </div>
               <div class="governor-info">
                 <h4 class="governor-name">Tom Cruise</h4>
                 <p class="governor-desc">Pelo comprometimento inabalável com a comunidade cinematográfica e de dublês
@@ -747,7 +981,9 @@
               </div>
             </div>
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="300">
-              <div class="governor-image-rect" style="background-image: url('images/governors_wynn_thomas.png');"></div>
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_wynn_thomas.png&w=600&q=80');">
+              </div>
               <div class="governor-info">
                 <h4 class="governor-name">Wynn Thomas</h4>
                 <p class="governor-desc">Visionário designer de produção</p>
@@ -761,7 +997,8 @@
           <h3 class="governors-column-title text-center" data-aos="fade-up">Prêmio Humanitário Jean Hersholt</h3>
           <div class="governors-centered" data-aos="fade-up" data-aos-delay="400">
             <div class="governor-card-large featured">
-              <div class="governor-image-rect" style="background-image: url('images/governors_dolly_parton.png');">
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_dolly_parton.png&w=600&q=80');">
               </div>
               <div class="governor-info">
                 <h4 class="governor-name">Dolly Parton</h4>
@@ -805,7 +1042,8 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-logo">
-        <img src="/.netlify/images?url=/images/logo-typography.png&w=200&q=80" alt="Oscars" class="footer-logo-img">
+        <img src="/.netlify/images?url=/images/logo-typography.png&w=200&q=80" width="200" height="auto" loading="lazy"
+          alt="Oscars" class="footer-logo-img">
       </div>
       <div class="footer-links">
         <a href="#">Imprensa</a>
@@ -818,8 +1056,8 @@
 
 
   <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 
   <!-- Three.js -->
   <script type="importmap">
@@ -831,7 +1069,7 @@
   }
   </script>
   <script type="module" src="oscar-3d.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 
 </body>
 
