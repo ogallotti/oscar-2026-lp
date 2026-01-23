@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const lerp = (start, end, factor) => start + (end - start) * factor;
   const smoothFactor = 0.15; // Increased for snappier response on mobile
 
-  function animateParallax() {
+  function updateParallax() { // Renamed from animateParallax to updateParallax to avoid conflict
+    // Read directly from window for max performance
     const scrollY = window.pageYOffset || document.documentElement.scrollTop;
     const heroHeight = window.innerHeight;
 
@@ -151,11 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollIndicator.style.opacity = smoothValues.scrollOpacity;
     }
 
-    requestAnimationFrame(animateParallax);
+    requestAnimationFrame(updateParallax);
   }
 
   // Start parallax animation loop
-  animateParallax();
+  updateParallax();
 
   // ==========================================
   // GOLDEN PARTICLES SYSTEM

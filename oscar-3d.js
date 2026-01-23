@@ -255,26 +255,20 @@ class Oscar3D {
         const width = this.container.offsetWidth;
         const height = this.container.offsetHeight;
 
+        // On mobile, ignore vertical-only resizes (address bar showing/hiding) to prevent stutter
+        if (this.isMobile && width === this.lastWidth) return;
+
+        this.lastWidth = width;
+
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
-    }
-
-    onScroll() {
-        const scrollY = window.scrollY;
-        const heroHeight = window.innerHeight;
-
-        if (scrollY < heroHeight) {
-            this.targetScrollProgress = Math.min(scrollY / heroHeight, 1);
-            this.targetRotation = this.targetScrollProgress * Math.PI * 2;
-        }
     }
 
     animate() {
         requestAnimationFrame(() => this.animate());
 
         if (this.modelGroup && this.model) {
-            // Read scroll directly in loop for immediate mobile response
             const scrollY = window.pageYOffset || document.documentElement.scrollTop;
             const heroHeight = window.innerHeight;
 
