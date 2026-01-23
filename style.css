@@ -206,6 +206,13 @@ img {
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .hero {
+    height: 100vh;
+    min-height: auto;
+  }
+}
+
 .hero-bg {
   position: absolute;
   inset: -20%;
