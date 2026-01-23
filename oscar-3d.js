@@ -79,6 +79,9 @@ class Oscar3D {
         // Event listeners
         this.setupEventListeners();
 
+        // Calculate initial scroll state immediately
+        this.onScroll();
+
         // Start animation
         this.animate();
     }
