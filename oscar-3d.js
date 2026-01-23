@@ -252,6 +252,11 @@ class Oscar3D {
         const width = this.container.offsetWidth;
         const height = this.container.offsetHeight;
 
+        // On mobile, ignore vertical-only resizes (address bar showing/hiding) to prevent stutter
+        if (this.isMobile && width === this.lastWidth) return;
+
+        this.lastWidth = width;
+
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
