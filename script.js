@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Start parallax animation loop
-  window.addEventListener('scroll', updateParallax);
+  window.addEventListener('scroll', updateParallax, { passive: true });
   animateParallax();
 
   // ==========================================
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.init();
       this.animate();
 
-      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('resize', () => this.resize(), { passive: true });
     }
 
     resize() {
@@ -232,13 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
         this.ctx.globalAlpha = p.opacity;
         this.ctx.fill();
 
-        // Add glow effect
-        this.ctx.shadowBlur = 10;
-        this.ctx.shadowColor = p.color;
+        // Add glow effect (Optimized: Removed shadowBlur for performance)
+        // this.ctx.shadowBlur = 10;
+        // this.ctx.shadowColor = p.color;
       });
 
       this.ctx.globalAlpha = 1;
-      this.ctx.shadowBlur = 0;
+
 
       requestAnimationFrame(() => this.animate());
     }
@@ -246,14 +246,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize particles on hero
   new GoldenParticles('particles-hero', {
-    count: 60,
+    count: 30, // Reduced from 60 for performance
     maxSize: 3,
     speed: 0.4
   });
 
   // Initialize particles on nominees section
   new GoldenParticles('particles-nominees', {
-    count: 40,
+    count: 20, // Reduced from 40 for performance
     maxSize: 2.5,
     speed: 0.3,
     colors: ['#f4d03f', '#d4a017', '#cfb26f']

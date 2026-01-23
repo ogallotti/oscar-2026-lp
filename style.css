@@ -263,16 +263,16 @@ img {
   letter-spacing: 0.2em;
   color: var(--color-gold);
   margin-bottom: 2.5rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.5s forwards;
+  /* Optimized for LCP: No animation */
+  opacity: 1;
 }
 
 .hero-logo {
   width: 60px;
   height: auto;
   margin-bottom: 2rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.3s forwards;
+  /* Optimized for LCP: No animation */
+  opacity: 1;
   filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
 }
 
@@ -294,9 +294,9 @@ img {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 1s ease 0.7s forwards;
+  /* Optimized for LCP: No animation */
+  opacity: 1;
+  transform: none;
 }
 
 .line-2 {
@@ -305,9 +305,9 @@ img {
   font-size: clamp(4rem, 12vw, 9rem);
   font-weight: 400;
   color: var(--color-gold-light);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 1s ease 0.9s forwards;
+  /* Optimized for LCP: No animation */
+  opacity: 1;
+  transform: none;
 }
 
 .hero-subheadline {
@@ -316,13 +316,11 @@ img {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 3rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 1.1s forwards;
+  opacity: 1;
 }
 
 .hero .btn {
-  opacity: 0;
-  animation: fadeIn 1s ease 1.3s forwards;
+  opacity: 1;
 }
 
 /* Scroll Indication */
@@ -358,6 +356,9 @@ img {
 .section {
   padding: 8rem 0;
   position: relative;
+  /* Performance: skip rendering off-screen content */
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
 }
 
 .section-label {

@@ -11,6 +11,12 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Resource Hints -->
+  <link rel="dns-prefetch" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="preload" href="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" as="image">
+
   <link
     href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet">
@@ -23,6 +29,10 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Scripts (Deferred) -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -42,7 +52,8 @@
     </div>
 
     <div class="container hero-content">
-      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo">
+      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo" width="60"
+        height="auto" fetchpriority="high">
       <p class="hero-date">Domingo, 15 de Março de 2026</p>
 
       <div class="hero-title-wrapper">
@@ -88,7 +99,7 @@
           <!-- Stylized Frame -->
           <div class="visual-frame">
             <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" alt="Conan O'Brien apresentando o Oscar"
-              class="intro-image">
+              class="intro-image" width="600" height="400" loading="lazy">
           </div>
         </div>
       </div>
@@ -817,9 +828,7 @@
   </footer>
 
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Scripts (Moved to Head) -->
 
   <!-- Three.js -->
   <script type="importmap">
@@ -831,7 +840,7 @@
   }
   </script>
   <script type="module" src="oscar-3d.js"></script>
-  <script src="script.js"></script>
+
 
 </body>
 
