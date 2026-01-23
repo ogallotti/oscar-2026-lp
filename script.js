@@ -66,18 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const lerp = (start, end, factor) => start + (end - start) * factor;
   const smoothFactor = 0.08; // Lower = smoother but slower
 
-  function animateParallax() {
-    // Use getBoundingClientRect for visual scroll position
-    // This is robust against mobile URL bar resizing
-    const heroBg = document.querySelector('.hero-bg');
-    if (!heroBg) return;
-
-    const rect = heroBg.getBoundingClientRect();
-    const visualScrollY = -rect.top;
+  function updateParallax() { // Renamed from animateParallax to updateParallax to avoid conflict
+    // Read directly from window for max performance
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
     const heroHeight = window.innerHeight;
 
-    if (visualScrollY < heroHeight && visualScrollY > -100) {
-      const scrollY = Math.max(0, visualScrollY); // Ensure positive for logic
+    if (scrollY < heroHeight) {
       const progress = scrollY / heroHeight;
 
       // Update targets directly in the loop

@@ -260,17 +260,12 @@ class Oscar3D {
     animate() {
         requestAnimationFrame(() => this.animate());
 
-        if (this.modelGroup && this.model && this.container) {
-            // Use getBoundingClientRect for TRUE visual position (fixes mobile URL bar resize issues)
-            // rect.top is 0 when at top, and becomes negative as we scroll down.
-            // visualScrollY = -rect.top
-            const rect = this.container.getBoundingClientRect();
-            const visualScrollY = -rect.top;
+        if (this.modelGroup && this.model) {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
             const heroHeight = window.innerHeight;
 
-            // Calculate progress based on visual position relative to viewport
-            if (visualScrollY > -100) { // Allow slight overscroll handling
-                this.targetScrollProgress = Math.min(Math.max(visualScrollY / heroHeight, 0), 1);
+            if (scrollY < heroHeight) {
+                this.targetScrollProgress = Math.min(scrollY / heroHeight, 1);
                 this.targetRotation = this.targetScrollProgress * Math.PI * 2;
             }
 
@@ -300,33 +295,4 @@ class Oscar3D {
 
 document.addEventListener('DOMContentLoaded', () => {
     new Oscar3D();
-
-    // ==========================================
-    // DEBUG - Temporary Scroll Monitor
-    // ==========================================
-    const debugDiv = document.createElement('div');
-    debugDiv.style.position = 'fixed';
-    debugDiv.style.top = '100px'; // Move to top (below header/address bar)
-    debugDiv.style.right = '10px'; // Move to right
-    debugDiv.style.background = 'rgba(0,0,0,0.8)';
-    debugDiv.style.color = 'lime';
-    debugDiv.style.padding = '5px';
-    debugDiv.style.zIndex = '9999';
-    debugDiv.style.fontSize = '12px';
-    debugDiv.style.pointerEvents = 'none';
-    debugDiv.innerHTML = 'Scroll: 0';
-    document.body.appendChild(debugDiv);
-
-    const heroEl = document.querySelector('.hero');
-
-    function updateDebug() {
-        const winY = window.pageYOffset;
-        const htmlY = document.documentElement.scrollTop;
-        const bodyY = document.body.scrollTop;
-        const heroTop = heroEl ? Math.round(heroEl.getBoundingClientRect().top) : 0;
-
-        debugDiv.innerHTML = `W:${Math.round(winY)} H:${Math.round(htmlY)} B:${Math.round(bodyY)} HeroTop:${heroTop}`;
-        requestAnimationFrame(updateDebug);
-    }
-    updateDebug();
 });
