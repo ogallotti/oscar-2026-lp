@@ -39,7 +39,7 @@
 }
 
 html {
-  /* scroll-behavior: smooth;  REMOVED to prevent parallax lag */
+  scroll-behavior: smooth;
   font-size: 16px;
 }
 
