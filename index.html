@@ -261,7 +261,11 @@
 
     <!-- Estatueta Oscar 3D -->
     <div class="oscar-statue" id="oscar-statue">
-      <canvas id="oscar-3d-canvas"></canvas>
+      <!-- Static Fallback Image (LCP optimized) -->
+      <img src="/.netlify/images?url=/images/statue.png&w=600&q=80" alt="Oscar Statue" class="oscar-static-img"
+        width="600" height="800"
+        style="width: 100%; height: 100%; object-fit: contain; opacity: 1; transition: opacity 0.5s ease;">
+      <canvas id="oscar-3d-canvas" style="opacity: 0; transition: opacity 1s ease;"></canvas>
     </div>
 
     <div class="container hero-content">
@@ -1068,9 +1072,21 @@
     }
   }
   </script>
-  <script type="module" src="oscar-3d.js"></script>
+  <script>
+    // Defer 3D model loading to avoid blocking LCP
+    window.addEventListener('load', () => {
+      // Only load 3D on desktop/laptop (save battery/data on mobile)
+      if (window.innerWidth > 768) {
+        setTimeout(() => {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = 'oscar-3d.js';
+          document.body.appendChild(script);
+        }, 2500); // 2.5s delay after load
+      }
+    });
+  </script>
   <script src="script.js" defer></script>
-
 </body>
 
 </html>

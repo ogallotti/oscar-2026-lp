@@ -210,12 +210,23 @@ class Oscar3D {
                 this.modelGroup.position.z = this.initialZ;
 
                 this.scene.add(this.modelGroup);
-
-                // Add environment map
                 this.addEnvironmentMap();
+
+                // Transition: Fade out static image, fade in canvas
+                const staticImg = this.container.querySelector('.oscar-static-img');
+                const canvas3d = this.canvas;
+
+                if (canvas3d) canvas3d.style.opacity = '1';
+                if (staticImg) {
+                    staticImg.style.opacity = '0';
+                    setTimeout(() => {
+                        staticImg.style.display = 'none';
+                    }, 500);
+                }
+
             },
             (progress) => {
-                console.log('Loading Oscar 3D:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
+                // console.log('Loading Oscar 3D:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
             },
             (error) => {
                 console.error('Error loading Oscar 3D:', error);

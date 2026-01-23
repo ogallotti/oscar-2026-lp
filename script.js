@@ -152,11 +152,30 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollIndicator.style.opacity = smoothValues.scrollOpacity;
     }
 
-    requestAnimationFrame(updateParallax);
+    if (isHeroVisible) {
+      requestAnimationFrame(updateParallax);
+    }
   }
 
-  // Start parallax animation loop
-  updateParallax();
+  // Start parallax animation loop ONLY when visible
+  const heroSection = document.querySelector('.hero');
+  let isHeroVisible = true;
+
+  if (heroSection) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isHeroVisible = entry.isIntersecting;
+        if (isHeroVisible) {
+          updateParallax();
+        }
+      });
+    });
+    observer.observe(heroSection);
+  } else {
+    updateParallax();
+  }
+
+
 
   // ==========================================
   // GOLDEN PARTICLES SYSTEM
