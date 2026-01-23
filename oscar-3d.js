@@ -314,8 +314,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(debugDiv);
 
     function updateDebug() {
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        debugDiv.innerHTML = `Y: ${Math.round(scrollY)} | HeroH: ${window.innerHeight}`;
+        const winY = window.pageYOffset;
+        const htmlY = document.documentElement.scrollTop;
+        const bodyY = document.body.scrollTop;
+        const winH = window.innerHeight;
+
+        debugDiv.innerHTML = `W:${Math.round(winY)} H:${Math.round(htmlY)} B:${Math.round(bodyY)} VH:${winH}`;
         requestAnimationFrame(updateDebug);
     }
     updateDebug();
