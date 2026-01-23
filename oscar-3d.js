@@ -274,8 +274,18 @@ class Oscar3D {
         requestAnimationFrame(() => this.animate());
 
         if (this.modelGroup && this.model) {
+            // Read scroll directly in loop for immediate mobile response
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            const heroHeight = window.innerHeight;
+
+            if (scrollY < heroHeight) {
+                this.targetScrollProgress = Math.min(scrollY / heroHeight, 1);
+                this.targetRotation = this.targetScrollProgress * Math.PI * 2;
+            }
+
             // Smooth interpolation (lerp) for buttery movement
-            const smoothFactor = 0.06;
+            // Increased factor for better responsiveness
+            const smoothFactor = this.isMobile ? 0.15 : 0.08;
 
             this.scrollProgress += (this.targetScrollProgress - this.scrollProgress) * smoothFactor;
             this.scrollRotation += (this.targetRotation - this.scrollRotation) * smoothFactor;
