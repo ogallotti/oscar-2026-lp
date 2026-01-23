@@ -66,23 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const lerp = (start, end, factor) => start + (end - start) * factor;
   const smoothFactor = 0.08; // Lower = smoother but slower
 
-  function updateParallax() {
-    const scrollY = window.scrollY;
+  function animateParallax() {
+    // Use getBoundingClientRect for visual scroll position
+    // This is robust against mobile URL bar resizing
+    const heroBg = document.querySelector('.hero-bg');
+    if (!heroBg) return;
+
+    const rect = heroBg.getBoundingClientRect();
+    const visualScrollY = -rect.top;
     const heroHeight = window.innerHeight;
 
-    if (scrollY < heroHeight) {
+    if (visualScrollY < heroHeight && visualScrollY > -100) {
+      const scrollY = Math.max(0, visualScrollY); // Ensure positive for logic
       const progress = scrollY / heroHeight;
 
-      // Set target values
+      // Update targets directly in the loop
       targetValues.bgY = scrollY * 0.4;
       targetValues.bgScale = 1 + scrollY * 0.0003;
 
-      // Overlay fades out as user scrolls (reveals statue)
       targetValues.overlayOpacity = Math.max(0, 1 - progress * 1.8);
 
-      // Logo
       targetValues.logoY = scrollY * 0.9;
-      targetValues.logoOpacity = Math.max(0, 1 - progress * 1.6);
+      targetValues.logoOpacity = Math.max(0, 1 - progress * 1.6); // Fades out faster
 
       targetValues.dateY = scrollY * 0.8;
       targetValues.dateOpacity = Math.max(0, 1 - progress * 1.5);

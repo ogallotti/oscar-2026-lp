@@ -257,22 +257,26 @@ class Oscar3D {
         this.renderer.setSize(width, height);
     }
 
-    onScroll() {
-        const scrollY = window.scrollY;
-        const heroHeight = window.innerHeight;
-
-        if (scrollY < heroHeight) {
-            this.targetScrollProgress = Math.min(scrollY / heroHeight, 1);
-            this.targetRotation = this.targetScrollProgress * Math.PI * 2;
-        }
-    }
-
     animate() {
         requestAnimationFrame(() => this.animate());
 
-        if (this.modelGroup && this.model) {
+        if (this.modelGroup && this.model && this.container) {
+            // Use getBoundingClientRect for TRUE visual position (fixes mobile URL bar resize issues)
+            // rect.top is 0 when at top, and becomes negative as we scroll down.
+            // visualScrollY = -rect.top
+            const rect = this.container.getBoundingClientRect();
+            const visualScrollY = -rect.top;
+            const heroHeight = window.innerHeight;
+
+            // Calculate progress based on visual position relative to viewport
+            if (visualScrollY > -100) { // Allow slight overscroll handling
+                this.targetScrollProgress = Math.min(Math.max(visualScrollY / heroHeight, 0), 1);
+                this.targetRotation = this.targetScrollProgress * Math.PI * 2;
+            }
+
             // Smooth interpolation (lerp) for buttery movement
-            const smoothFactor = 0.06;
+            // Increased factor for better responsiveness
+            const smoothFactor = this.isMobile ? 0.15 : 0.08;
 
             this.scrollProgress += (this.targetScrollProgress - this.scrollProgress) * smoothFactor;
             this.scrollRotation += (this.targetRotation - this.scrollRotation) * smoothFactor;
