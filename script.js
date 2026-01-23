@@ -197,13 +197,15 @@ document.addEventListener('DOMContentLoaded', () => {
       this.init();
       this.animate();
 
-      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('resize', this.debounce(() => this.resize(), 250));
     }
 
     resize() {
       const parent = this.canvas.parentElement;
-      this.canvas.width = parent.offsetWidth;
-      this.canvas.height = parent.offsetHeight;
+      if (parent) {
+        this.canvas.width = parent.offsetWidth;
+        this.canvas.height = parent.offsetHeight;
+      }
     }
 
     init() {
@@ -212,6 +214,20 @@ document.addEventListener('DOMContentLoaded', () => {
         this.particles.push(this.createParticle());
       }
     }
+
+    // Debounce helper
+    debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
 
     createParticle(atTop = false) {
       return {
