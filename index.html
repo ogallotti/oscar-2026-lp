@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oscar 2026 - A 98ª Cerimônia</title>
   <meta name="description" content="Acompanhe a 98ª cerimônia do Oscar, honrando os melhores filmes de 2025.">
+  <link rel="icon" type="image/png" href="/images/logo-icon.png">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,19 +31,30 @@
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
+    <div class="hero-text-overlay"></div>
+
+    <!-- Particulas Douradas -->
+    <canvas id="particles-hero" class="particles-canvas"></canvas>
+
+    <!-- Estatueta Oscar 3D -->
+    <div class="oscar-statue" id="oscar-statue">
+      <canvas id="oscar-3d-canvas"></canvas>
+    </div>
+
     <div class="container hero-content">
+      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo">
       <p class="hero-date">Domingo, 15 de Março de 2026</p>
 
       <div class="hero-title-wrapper">
         <h1 class="hero-headline">
-          <span class="line-1">Esse é um Deploy Preview</span>
+          <span class="line-1">A 98ª Cerimônia</span>
           <span class="line-2">do Oscar</span>
         </h1>
       </div>
 
       <p class="hero-subheadline">Honrando os melhores filmes de 2025. Ao vivo do Dolby Theatre no Ovation
         Hollywood.</p>
-      <a href="#indicados" class="btn btn-gold-outline">Ver os Indicados</a>
+      <a href="#indicados" class="btn btn-gold-outline glow-gold">Ver os Indicados</a>
     </div>
 
     <div class="scroll-indicator">
@@ -55,26 +67,28 @@
   <section class="section intro-section">
     <div class="container">
       <div class="intro-grid">
-        <div class="intro-content" data-aos="fade-up">
-          <span class="section-label">O Evento</span>
-          <h2 class="section-title">Uma Celebração <br> <span class="italic-highlight">Histórica</span></h2>
+        <div class="intro-content">
+          <span class="section-label" data-aos="fade-up">O Evento</span>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Uma Celebracao <br> <span
+              class="italic-highlight">Historica</span></h2>
           <div class="intro-body">
-            <p>
-              Apresentada pelo lendário <strong>Conan O'Brien</strong> pelo segundo ano consecutivo, a 98ª
-              edição do Oscar retorna para celebrar a excelência cinematográfica.
+            <p data-aos="fade-up" data-aos-delay="200">
+              Apresentada pelo lendario <strong>Conan O'Brien</strong> pelo segundo ano consecutivo, a 98a
+              edicao do Oscar retorna para celebrar a excelencia cinematografica.
             </p>
-            <p>
-              Produzida por <em>Raj Kapoor, Katy Mullan, Jeff Ross e Mike Sweeney</em>, a cerimônia deste
-              ano promete ser um tributo visualmente deslumbrante à arte de fazer cinema.
+            <p data-aos="fade-up" data-aos-delay="300">
+              Produzida por <em>Raj Kapoor, Katy Mullan, Jeff Ross e Mike Sweeney</em>, a cerimonia deste
+              ano promete ser um tributo visualmente deslumbrante a arte de fazer cinema.
             </p>
           </div>
-          <a href="#" class="link-arrow">Saiba mais sobre a cerimônia</a>
+          <a href="#" class="link-arrow" data-aos="fade-up" data-aos-delay="400">Saiba mais sobre a cerimonia</a>
         </div>
 
-        <div class="intro-visual" data-aos="fade-left" data-aos-delay="200">
+        <div class="intro-visual" data-aos="fade-left" data-aos-delay="300">
           <!-- Stylized Frame -->
           <div class="visual-frame">
-            <div class="placeholder-image"></div>
+            <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" alt="Conan O'Brien apresentando o Oscar"
+              class="intro-image">
           </div>
         </div>
       </div>
@@ -84,200 +98,619 @@
   <!-- RETROSPECTIVA (Carousel) -->
   <section class="section retrospective-section">
     <div class="container">
-      <div class="section-header text-center" data-aos="fade-up">
-        <span class="section-label">Edições Anteriores</span>
-        <h2 class="section-title">Momentos Inesquecíveis</h2>
+      <div class="section-header text-center">
+        <span class="section-label" data-aos="fade-up">Edicoes Anteriores</span>
+        <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Momentos Inesqueciveis</h2>
       </div>
+    </div>
 
-      <!-- Swiper -->
-      <div class="swiper retro-swiper" data-aos="fade-up" data-aos-delay="200">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="retro-card">
-              <div class="retro-image-placeholder retro-1"></div>
-              <div class="retro-overlay">
-                <span class="retro-caption">Vencedores 2025</span>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="retro-card">
-              <div class="retro-image-placeholder retro-2"></div>
-              <div class="retro-overlay">
-                <span class="retro-caption">Performance Musical</span>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="retro-card">
-              <div class="retro-image-placeholder retro-3"></div>
-              <div class="retro-overlay">
-                <span class="retro-caption">Red Carpet</span>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="retro-card">
-              <div class="retro-image-placeholder retro-4"></div>
-              <div class="retro-overlay">
-                <span class="retro-caption">Homenagem</span>
-              </div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="retro-card">
-              <div class="retro-image-placeholder retro-5"></div>
-              <div class="retro-overlay">
-                <span class="retro-caption">Bastidores</span>
-              </div>
+    <!-- Ticker Infinito Full Width -->
+    <div class="ticker-wrapper ticker-fullwidth" data-aos="fade-up" data-aos-delay="200">
+      <div class="ticker-fade ticker-fade-left"></div>
+      <div class="ticker-track">
+        <!-- Itens Originais -->
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-1"
+              style="background-image: url('/.netlify/images?url=/images/retro_winners.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Vencedores 2025</span>
             </div>
           </div>
         </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-2"
+              style="background-image: url('/.netlify/images?url=/images/retro_musical.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Performance Musical</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-3"
+              style="background-image: url('/.netlify/images?url=/images/retro_red_carpet.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Red Carpet</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-4"
+              style="background-image: url('/.netlify/images?url=/images/retro_tribute.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Homenagem</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-5"
+              style="background-image: url('/.netlify/images?url=/images/retro_backstage.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Bastidores</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-6"
+              style="background-image: url('/.netlify/images?url=/images/retro_director.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Discursos</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-7"
+              style="background-image: url('/.netlify/images?url=/images/retro_actress.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Celebração</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clones para loop infinito -->
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-1"
+              style="background-image: url('/.netlify/images?url=/images/retro_winners.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Vencedores 2025</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-2"
+              style="background-image: url('/.netlify/images?url=/images/retro_musical.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Performance Musical</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-3"
+              style="background-image: url('/.netlify/images?url=/images/retro_red_carpet.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Red Carpet</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-4"
+              style="background-image: url('/.netlify/images?url=/images/retro_tribute.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Homenagem</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-5"
+              style="background-image: url('/.netlify/images?url=/images/retro_backstage.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Bastidores</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-6"
+              style="background-image: url('/.netlify/images?url=/images/retro_director.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Discursos</span>
+            </div>
+          </div>
+        </div>
+        <div class="ticker-slide">
+          <div class="retro-card">
+            <div class="retro-image-placeholder retro-7"
+              style="background-image: url('/.netlify/images?url=/images/retro_actress.png&w=600&q=80');"></div>
+            <div class="retro-overlay">
+              <span class="retro-caption">Celebração</span>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="ticker-fade ticker-fade-right"></div>
+    </div>
     </div>
   </section>
 
-  <!-- INDICADOS (Main Grid) -->
+  <!-- INDICADOS (Sistema de Abas) -->
   <section id="indicados" class="section nominees-section">
-    <!-- Sub-section 4.1: Melhor Filme -->
-    <div class="container nominee-group mb-large">
-      <div class="section-header" data-aos="fade-up">
-        <span class="section-label">Categoria Principal</span>
-        <h2 class="section-title text-gold-light">Melhor Filme</h2>
+    <!-- Particulas Douradas Indicados -->
+    <canvas id="particles-nominees" class="particles-canvas"></canvas>
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-label" data-aos="fade-up">Indicados 2026</span>
+        <h2 class="section-title text-gold-light" data-aos="fade-up" data-aos-delay="100">Todas as Categorias</h2>
       </div>
 
-      <div class="nominees-grid grid-posters" data-aos="fade-up" data-aos-delay="200">
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #2b2b2b;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Anora</h3>
-            <p class="nominee-meta">Sean Baker, Alex Coco and Samantha Quan</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #383838;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">The Brutalist</h3>
-            <p class="nominee-meta">Brady Corbet, Nick Gordon</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #2b2b2b;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">A Complete Unknown</h3>
-            <p class="nominee-meta">Fred Berger, James Mangold</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #383838;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Conclave</h3>
-            <p class="nominee-meta">Alice Dawson, Robert Harris</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #2b2b2b;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Dune: Part Two</h3>
-            <p class="nominee-meta">Mary Parent, Cale Boyter</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #383838;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Emilia Pérez</h3>
-            <p class="nominee-meta">Jacques Audiard, Pascal Caucheteux</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #2b2b2b;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">I'm Still Here</h3>
-            <p class="nominee-meta">Walter Salles, Maria Carlota Bruno</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #383838;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Nickel Boys</h3>
-            <p class="nominee-meta">Joslyn Barnes, Dede Gardner</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #2b2b2b;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">The Substance</h3>
-            <p class="nominee-meta">Tim Bevan, Eric Fellner</p>
-          </div>
-        </div>
-        <div class="nominee-card">
-          <div class="nominee-poster" style="background-color: #383838;"></div>
-          <div class="nominee-info">
-            <h3 class="nominee-title">Wicked</h3>
-            <p class="nominee-meta">Marc Platt, David Stone</p>
-          </div>
-        </div>
+      <!-- Navegação das Abas -->
+      <div class="tabs-nav" data-aos="fade-up" data-aos-delay="150">
+        <button class="tab-btn active glow-gold" data-tab="principais">Principais</button>
+        <button class="tab-btn" data-tab="atuacao">Atuação</button>
+        <button class="tab-btn" data-tab="roteiro">Roteiro</button>
+        <button class="tab-btn" data-tab="internacional">Internacional</button>
+        <button class="tab-btn" data-tab="tecnicas">Técnicas</button>
+        <button class="tab-btn" data-tab="curtas">Curtas</button>
       </div>
-    </div>
 
-    <!-- 4.2: DIREÇÃO E ATUAÇÕES -->
-    <div class="container nominee-group mb-large">
-      <div class="row">
-        <!-- Direção -->
-        <div class="col-half" data-aos="fade-right">
-          <h3 class="category-title">Direção</h3>
-          <ul class="nominee-list">
-            <li class="nominee-item">
-              <span class="nominee-name">Sean Baker</span>
-              <span class="nominee-work">Anora</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Brady Corbet</span>
-              <span class="nominee-work">The Brutalist</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">James Mangold</span>
-              <span class="nominee-work">A Complete Unknown</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Jacques Audiard</span>
-              <span class="nominee-work">Emilia Pérez</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Coralie Fargeat</span>
-              <span class="nominee-work">The Substance</span>
-            </li>
-          </ul>
+      <!-- Conteúdo das Abas -->
+      <div class="tabs-content" data-aos="fade-up" data-aos-delay="200">
+
+        <!-- Tab: Principais -->
+        <div class="tab-pane active" id="tab-principais">
+          <div class="category-block">
+            <h3 class="category-title">Melhor Filme</h3>
+            <div class="nominees-grid grid-posters">
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/625400-bugonia-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Bugonia</h4>
+                  <p class="nominee-meta">Ed Guiney, Andrew Lowe, Yorgos Lanthimos, Emma Stone, Lars Knudsen</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/817977-f1-the-movie-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">F1</h4>
+                  <p class="nominee-meta">Chad Oman, Brad Pitt, Dede Gardner, Jeremy Kleiner, Joseph Kosinski, Jerry
+                    Bruckheimer</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/958100-frankenstein-2025-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Frankenstein</h4>
+                  <p class="nominee-meta">Guillermo del Toro, J. Miles Dale, Scott Stuber</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/772232-hamnet-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Hamnet</h4>
+                  <p class="nominee-meta">Liza Marshall, Pippa Harris, Nicolas Gonda, Steven Spielberg, Sam Mendes</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/1197499-marty-supreme-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Marty Supreme</h4>
+                  <p class="nominee-meta">Eli Bush, Ronald Bronstein, Josh Safdie, Anthony Katagas, Timothée Chalamet
+                  </p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/951277-one-battle-after-another-0-460-0-690-crop.jpg');">
+                </div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">One Battle after Another</h4>
+                  <p class="nominee-meta">Adam Somner, Sara Murphy, Paul Thomas Anderson</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/1104348-the-secret-agent-2025-0-460-0-690-crop.jpg');">
+                </div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">The Secret Agent</h4>
+                  <p class="nominee-meta">Emilie Lesclaux</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/1013357-sentimental-value-2025-0-460-0-690-crop.jpg');">
+                </div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Sentimental Value</h4>
+                  <p class="nominee-meta">Maria Ekerhovd, Andrea Berentsen Ottmar</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/1116600-sinners-2025-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Sinners</h4>
+                  <p class="nominee-meta">Zinzi Coogler, Sev Ohanian, Ryan Coogler</p>
+                </div>
+              </div>
+              <div class="nominee-card">
+                <div class="nominee-poster"
+                  style="background-image: url('images/nominees/1125383-train-dreams-0-460-0-690-crop.jpg');"></div>
+                <div class="nominee-info">
+                  <h4 class="nominee-title">Train Dreams</h4>
+                  <p class="nominee-meta">Marissa McMahon, Teddy Schwarzman, Will Janowitz, Ashley Schlaifer, Michael
+                    Heimler</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="category-block">
+            <h3 class="category-title">Direção</h3>
+            <ul class="nominee-list">
+              <li class="nominee-item"><span class="nominee-name">Chloé Zhao</span><span
+                  class="nominee-work">Hamnet</span></li>
+              <li class="nominee-item"><span class="nominee-name">Josh Safdie</span><span class="nominee-work">Marty
+                  Supreme</span></li>
+              <li class="nominee-item"><span class="nominee-name">Paul Thomas Anderson</span><span
+                  class="nominee-work">One Battle after Another</span></li>
+              <li class="nominee-item"><span class="nominee-name">Joachim Trier</span><span
+                  class="nominee-work">Sentimental Value</span></li>
+              <li class="nominee-item"><span class="nominee-name">Ryan Coogler</span><span
+                  class="nominee-work">Sinners</span></li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Ator -->
-        <div class="col-half" data-aos="fade-left">
-          <h3 class="category-title">Ator Principal</h3>
-          <ul class="nominee-list">
-            <li class="nominee-item">
-              <span class="nominee-name">Adrien Brody</span>
-              <span class="nominee-work">The Brutalist</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Timothée Chalamet</span>
-              <span class="nominee-work">A Complete Unknown</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Colman Domingo</span>
-              <span class="nominee-work">Sing Sing</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Ralph Fiennes</span>
-              <span class="nominee-work">Conclave</span>
-            </li>
-            <li class="nominee-item">
-              <span class="nominee-name">Sebastian Stan</span>
-              <span class="nominee-work">The Apprentice</span>
-            </li>
-          </ul>
+        <!-- Tab: Atuação -->
+        <div class="tab-pane" id="tab-atuacao">
+          <div class="categories-grid">
+            <div class="category-block">
+              <h3 class="category-title">Melhor Ator</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Timothée Chalamet</span><span
+                    class="nominee-work">Marty Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Leonardo DiCaprio</span><span
+                    class="nominee-work">One Battle after Another</span></li>
+                <li class="nominee-item"><span class="nominee-name">Ethan Hawke</span><span class="nominee-work">Blue
+                    Moon</span></li>
+                <li class="nominee-item"><span class="nominee-name">Michael B. Jordan</span><span
+                    class="nominee-work">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">Wagner Moura</span><span class="nominee-work">The
+                    Secret Agent</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Melhor Atriz</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Jessie Buckley</span><span
+                    class="nominee-work">Hamnet</span></li>
+                <li class="nominee-item"><span class="nominee-name">Rose Byrne</span><span class="nominee-work">If I Had
+                    Legs I'd Kick You</span></li>
+                <li class="nominee-item"><span class="nominee-name">Kate Hudson</span><span class="nominee-work">Song
+                    Sung Blue</span></li>
+                <li class="nominee-item"><span class="nominee-name">Renate Reinsve</span><span
+                    class="nominee-work">Sentimental Value</span></li>
+                <li class="nominee-item"><span class="nominee-name">Emma Stone</span><span
+                    class="nominee-work">Bugonia</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Ator Coadjuvante</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Benicio Del Toro</span><span
+                    class="nominee-work">One Battle after Another</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jacob Elordi</span><span
+                    class="nominee-work">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">Delroy Lindo</span><span
+                    class="nominee-work">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sean Penn</span><span class="nominee-work">One
+                    Battle after Another</span></li>
+                <li class="nominee-item"><span class="nominee-name">Stellan Skarsgård</span><span
+                    class="nominee-work">Sentimental Value</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Atriz Coadjuvante</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Elle Fanning</span><span
+                    class="nominee-work">Sentimental Value</span></li>
+                <li class="nominee-item"><span class="nominee-name">Inga Ibsdotter Lilleaas</span><span
+                    class="nominee-work">Sentimental Value</span></li>
+                <li class="nominee-item"><span class="nominee-name">Amy Madigan</span><span
+                    class="nominee-work">Weapons</span></li>
+                <li class="nominee-item"><span class="nominee-name">Wunmi Mosaku</span><span
+                    class="nominee-work">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">Teyana Taylor</span><span class="nominee-work">One
+                    Battle after Another</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Melhor Elenco (Nova)</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Nina Gold</span><span
+                    class="nominee-work">Hamnet</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jennifer Venditti</span><span
+                    class="nominee-work">Marty Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Cassandra Kulukundis</span><span
+                    class="nominee-work">One Battle after Another</span></li>
+                <li class="nominee-item"><span class="nominee-name">Gabriel Domingues</span><span
+                    class="nominee-work">The Secret Agent</span></li>
+                <li class="nominee-item"><span class="nominee-name">Francine Maisler</span><span
+                    class="nominee-work">Sinners</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
+
+        <!-- Tab: Roteiro -->
+        <div class="tab-pane" id="tab-roteiro">
+          <div class="categories-grid">
+            <div class="category-block">
+              <h3 class="category-title">Roteiro Original</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Blue Moon</span><span class="nominee-work">Robert
+                    Kaplow</span></li>
+                <li class="nominee-item"><span class="nominee-name">It Was Just an Accident</span><span
+                    class="nominee-work">Jafar Panahi</span></li>
+                <li class="nominee-item"><span class="nominee-name">Marty Supreme</span><span
+                    class="nominee-work">Ronald Bronstein, Josh Safdie</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sentimental Value</span><span
+                    class="nominee-work">Eskil Vogt, Joachim Trier</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sinners</span><span class="nominee-work">Ryan
+                    Coogler</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Roteiro Adaptado</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Bugonia</span><span class="nominee-work">Will
+                    Tracy</span></li>
+                <li class="nominee-item"><span class="nominee-name">Frankenstein</span><span
+                    class="nominee-work">Guillermo del Toro</span></li>
+                <li class="nominee-item"><span class="nominee-name">Hamnet</span><span class="nominee-work">Chloé Zhao,
+                    Maggie O'Farrell</span></li>
+                <li class="nominee-item"><span class="nominee-name">One Battle after Another</span><span
+                    class="nominee-work">Paul Thomas Anderson</span></li>
+                <li class="nominee-item"><span class="nominee-name">Train Dreams</span><span class="nominee-work">Clint
+                    Bentley, Greg Kwedar</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Internacional -->
+        <div class="tab-pane" id="tab-internacional">
+          <div class="categories-grid">
+            <div class="category-block">
+              <h3 class="category-title">Filme Internacional</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">The Secret Agent</span><span
+                    class="nominee-work">Brasil</span></li>
+                <li class="nominee-item"><span class="nominee-name">It Was Just an Accident</span><span
+                    class="nominee-work">França</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sentimental Value</span><span
+                    class="nominee-work">Noruega</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sirāt</span><span
+                    class="nominee-work">Espanha</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Voice of Hind Rajab</span><span
+                    class="nominee-work">Tunísia</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Documentário</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">The Alabama Solution</span><span
+                    class="nominee-work">Andrew Jarecki, Charlotte Kaufman</span></li>
+                <li class="nominee-item"><span class="nominee-name">Come See Me in the Good Light</span><span
+                    class="nominee-work">Ryan White, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Cutting through Rocks</span><span
+                    class="nominee-work">Sara Khaki, Mohammadreza Eyni</span></li>
+                <li class="nominee-item"><span class="nominee-name">Mr. Nobody against Putin</span><span
+                    class="nominee-work">A confirmar</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Perfect Neighbor</span><span
+                    class="nominee-work">Geeta Gandbhir, et al.</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Animação</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Arco</span><span class="nominee-work">Ugo Bienvenu,
+                    et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Elio</span><span class="nominee-work">Madeline
+                    Sharafian, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">KPop Demon Hunters</span><span
+                    class="nominee-work">Maggie Kang, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Little Amélie</span><span
+                    class="nominee-work">Maïlys Vallade, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Zootopia 2</span><span class="nominee-work">Jared
+                    Bush, Byron Howard</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Técnicas -->
+        <div class="tab-pane" id="tab-tecnicas">
+          <div class="categories-grid categories-grid-3">
+            <div class="category-block">
+              <h3 class="category-title">Cinematografia</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Dan Laustsen</span><span
+                    class="nominee-work">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">Darius Khondji</span><span
+                    class="nominee-work">Marty Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Michael Bauman</span><span class="nominee-work">One
+                    Battle...</span></li>
+                <li class="nominee-item"><span class="nominee-name">Autumn Durald Arkapaw</span><span
+                    class="nominee-work">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">Adolpho Veloso</span><span
+                    class="nominee-work">Train Dreams</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Design de Produção</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Tamara Deverell</span><span
+                    class="nominee-work">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">Fiona Crombie</span><span
+                    class="nominee-work">Hamnet</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jack Fisk</span><span class="nominee-work">Marty
+                    Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Florencia Martin</span><span
+                    class="nominee-work">One Battle...</span></li>
+                <li class="nominee-item"><span class="nominee-name">Hannah Beachler</span><span
+                    class="nominee-work">Sinners</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Figurino</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Deborah L. Scott</span><span
+                    class="nominee-work">Avatar 3</span></li>
+                <li class="nominee-item"><span class="nominee-name">Kate Hawley</span><span
+                    class="nominee-work">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">Malgosia Turzanska</span><span
+                    class="nominee-work">Hamnet</span></li>
+                <li class="nominee-item"><span class="nominee-name">Miyako Bellizzi</span><span
+                    class="nominee-work">Marty Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Ruth E. Carter</span><span
+                    class="nominee-work">Sinners</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Montagem</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Stephen Mirrione</span><span
+                    class="nominee-work">F1</span></li>
+                <li class="nominee-item"><span class="nominee-name">Ronald Bronstein, Josh Safdie</span><span
+                    class="nominee-work">Marty Supreme</span></li>
+                <li class="nominee-item"><span class="nominee-name">Andy Jurgensen</span><span class="nominee-work">One
+                    Battle...</span></li>
+                <li class="nominee-item"><span class="nominee-name">Olivier Bugge Coutté</span><span
+                    class="nominee-work">Sentimental Value</span></li>
+                <li class="nominee-item"><span class="nominee-name">Michael P. Shawver</span><span
+                    class="nominee-work">Sinners</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Trilha Sonora</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Jerskin Fendrix</span><span
+                    class="nominee-work">Bugonia</span></li>
+                <li class="nominee-item"><span class="nominee-name">Alexandre Desplat</span><span
+                    class="nominee-work">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">Max Richter</span><span
+                    class="nominee-work">Hamnet</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jonny Greenwood</span><span class="nominee-work">One
+                    Battle...</span></li>
+                <li class="nominee-item"><span class="nominee-name">Ludwig Goransson</span><span
+                    class="nominee-work">Sinners</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Canção Original</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">"Dear Me"</span><span class="nominee-work">Diane
+                    Warren: Relentless</span></li>
+                <li class="nominee-item"><span class="nominee-name">"Golden"</span><span class="nominee-work">KPop Demon
+                    Hunters</span></li>
+                <li class="nominee-item"><span class="nominee-name">"I Lied To You"</span><span
+                    class="nominee-work">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">"Sweet Dreams Of Joy"</span><span
+                    class="nominee-work">Viva Verdi!</span></li>
+                <li class="nominee-item"><span class="nominee-name">"Train Dreams"</span><span
+                    class="nominee-work">Train Dreams</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Maquiagem e Cabelo</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Frankenstein</span><span class="nominee-work">Mike
+                    Hill, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Kokuho</span><span class="nominee-work">Kyoko
+                    Toyokawa, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sinners</span><span class="nominee-work">Ken Diaz,
+                    et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Smashing Machine</span><span
+                    class="nominee-work">Kazu Hiro, et al.</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Ugly Stepsister</span><span
+                    class="nominee-work">Thomas Foldberg, et al.</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Som</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">F1</span></li>
+                <li class="nominee-item"><span class="nominee-name">Frankenstein</span></li>
+                <li class="nominee-item"><span class="nominee-name">One Battle after Another</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sinners</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sirāt</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Efeitos Visuais</h3>
+              <ul class="nominee-list compact">
+                <li class="nominee-item"><span class="nominee-name">Avatar: Fire and Ash</span></li>
+                <li class="nominee-item"><span class="nominee-name">F1</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jurassic World Rebirth</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Lost Bus</span></li>
+                <li class="nominee-item"><span class="nominee-name">Sinners</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Curtas -->
+        <div class="tab-pane" id="tab-curtas">
+          <div class="categories-grid">
+            <div class="category-block">
+              <h3 class="category-title">Curta de Animação</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Butterfly</span></li>
+                <li class="nominee-item"><span class="nominee-name">Forevergreen</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Girl Who Cried Pearls</span></li>
+                <li class="nominee-item"><span class="nominee-name">Retirement Plan</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Three Sisters</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Curta Documentário</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">All the Empty Rooms</span></li>
+                <li class="nominee-item"><span class="nominee-name">Armed Only with a Camera</span></li>
+                <li class="nominee-item"><span class="nominee-name">Children No More</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Devil Is Busy</span></li>
+                <li class="nominee-item"><span class="nominee-name">Perfectly a Strangeness</span></li>
+              </ul>
+            </div>
+            <div class="category-block">
+              <h3 class="category-title">Curta Live Action</h3>
+              <ul class="nominee-list">
+                <li class="nominee-item"><span class="nominee-name">Butcher's Stain</span></li>
+                <li class="nominee-item"><span class="nominee-name">A Friend of Dorothy</span></li>
+                <li class="nominee-item"><span class="nominee-name">Jane Austen's Period Drama</span></li>
+                <li class="nominee-item"><span class="nominee-name">The Singers</span></li>
+                <li class="nominee-item"><span class="nominee-name">Two People Exchanging Saliva</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -285,31 +718,57 @@
   <!-- GOVERNORS AWARDS -->
   <section class="section governors-section">
     <div class="container">
-      <div class="section-header text-center" data-aos="fade-up">
-        <span class="section-label">Homenagens Especiais</span>
-        <h2 class="section-title text-dark">Governors Awards</h2>
+      <div class="section-header text-center">
+        <span class="section-label" data-aos="fade-up">Homenagens Especiais</span>
+        <h2 class="section-title text-dark" data-aos="fade-up" data-aos-delay="100">Governors Awards</h2>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="150">Homenagem às lendas que moldaram a indústria
+        </p>
       </div>
 
-      <div class="governors-grid" data-aos="fade-up" data-aos-delay="200">
-        <div class="governor-card">
-          <div class="governor-image gov-1"></div>
-          <h4 class="governor-name">Juliet Taylor</h4>
-          <p class="governor-desc">Diretora de Elenco Lendária</p>
+      <div class="governors-content">
+        <!-- Oscar Honorário -->
+        <div class="governors-group mb-large">
+          <h3 class="governors-column-title text-center" data-aos="fade-up">Oscar Honorário</h3>
+          <div class="governors-grid">
+            <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="100">
+              <div class="governor-image-rect" style="background-image: url('images/governors_debbie_allen.png');">
+              </div>
+              <div class="governor-info">
+                <h4 class="governor-name">Debbie Allen</h4>
+                <p class="governor-desc">Coreógrafa e atriz pioneira</p>
+              </div>
+            </div>
+            <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="200">
+              <div class="governor-image-rect" style="background-image: url('images/governors_tom_cruise.png');"></div>
+              <div class="governor-info">
+                <h4 class="governor-name">Tom Cruise</h4>
+                <p class="governor-desc">Pelo comprometimento inabalável com a comunidade cinematográfica e de dublês
+                </p>
+              </div>
+            </div>
+            <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="300">
+              <div class="governor-image-rect" style="background-image: url('images/governors_wynn_thomas.png');"></div>
+              <div class="governor-info">
+                <h4 class="governor-name">Wynn Thomas</h4>
+                <p class="governor-desc">Visionário designer de produção</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="governor-card">
-          <div class="governor-image gov-2"></div>
-          <h4 class="governor-name">Quincy Jones</h4>
-          <p class="governor-desc">Produtor e Compositor (Póstumo)</p>
-        </div>
-        <div class="governor-card">
-          <div class="governor-image gov-3"></div>
-          <h4 class="governor-name">Richard Curtis</h4>
-          <p class="governor-desc">Prêmio Humanitário Jean Hersholt</p>
-        </div>
-        <div class="governor-card">
-          <div class="governor-image gov-4"></div>
-          <h4 class="governor-name">Michael G. Wilson & Barbara Broccoli</h4>
-          <p class="governor-desc">Prêmio Memorial Irving G. Thalberg</p>
+
+        <!-- Prêmio Humanitário -->
+        <div class="governors-group">
+          <h3 class="governors-column-title text-center" data-aos="fade-up">Prêmio Humanitário Jean Hersholt</h3>
+          <div class="governors-centered" data-aos="fade-up" data-aos-delay="400">
+            <div class="governor-card-large featured">
+              <div class="governor-image-rect" style="background-image: url('images/governors_dolly_parton.png');">
+              </div>
+              <div class="governor-info">
+                <h4 class="governor-name">Dolly Parton</h4>
+                <p class="governor-desc">Pela dedicação aos esforços de caridade e impacto humanitário duradouro</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -318,23 +777,24 @@
   <!-- REGRAS E NOVIDADES -->
   <section class="section rules-section">
     <div class="container">
-      <div class="rules-container" data-aos="fade-up">
+      <div class="rules-container">
         <div class="rules-header">
-          <h2 class="section-title">Evolução da Academia</h2>
-          <p>Novidades para a 98ª Edição</p>
+          <h2 class="section-title rules-title" data-aos="fade-right">Evolução da Academia</h2>
+          <p class="rules-subtitle" data-aos="fade-right" data-aos-delay="100">Novidades para a 98ª Edição</p>
         </div>
         <div class="rules-list">
-          <div class="rule-item">
+          <div class="rule-item" data-aos="fade-left" data-aos-delay="100">
             <h3>Melhor Elenco</h3>
             <p>A nova categoria competitiva reconhecendo o trabalho conjunto dos atores estreia em 2026.</p>
           </div>
-          <div class="rule-item">
-            <h3>Expansão de Salas</h3>
-            <p>Obrigação de exibição expandida para cidades além de LA e NY para elegibilidade a Melhor Filme.</p>
+          <div class="rule-item" data-aos="fade-left" data-aos-delay="200">
+            <h3>Obrigação de Exibição</h3>
+            <p>Membros devem assistir a todos os filmes indicados para votar na rodada final de qualquer categoria.</p>
           </div>
-          <div class="rule-item">
+          <div class="rule-item" data-aos="fade-left" data-aos-delay="300">
             <h3>Inteligência Artificial</h3>
-            <p>Novas diretrizes clarificando que apenas criadores humanos são elegíveis às estatuetas.</p>
+            <p>Novas regras estabelecem que o uso de IA generativa não altera a elegibilidade, mas a autoria criativa
+              humana deve ser central.</p>
           </div>
         </div>
       </div>
@@ -345,7 +805,7 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-logo">
-        <span class="oscars-logo-text">OSCARS</span>
+        <img src="/.netlify/images?url=/images/logo-typography.png&w=200&q=80" alt="Oscars" class="footer-logo-img">
       </div>
       <div class="footer-links">
         <a href="#">Imprensa</a>
@@ -360,6 +820,17 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Three.js -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="oscar-3d.js"></script>
   <script src="script.js"></script>
 
 </body>

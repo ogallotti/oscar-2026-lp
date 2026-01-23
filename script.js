@@ -2,60 +2,262 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize AOS (Animate On Scroll)
   AOS.init({
-    duration: 1000,
+    duration: 800,
     once: true,
     offset: 50,
     easing: 'ease-out-cubic'
   });
 
-  // Initialize Swiper for Retrospective Section
-  const retroSwiper = new Swiper('.retro-swiper', {
-    slidesPerView: 1.2,
-    spaceBetween: 20,
-    centeredSlides: true,
-    loop: true,
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    breakpoints: {
-      640: {
-        slidesPerView: 2.5,
-        spaceBetween: 30,
-        centeredSlides: false,
-      },
-      1024: {
-        slidesPerView: 3.5,
-        spaceBetween: 40,
-        centeredSlides: false,
-      },
-    }
+  // Sistema de Abas para Indicados
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetTab = button.getAttribute('data-tab');
+
+      // Remove active de todos os botões
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+
+      // Remove active de todos os panes
+      tabPanes.forEach(pane => pane.classList.remove('active'));
+
+      // Adiciona active ao botão clicado
+      button.classList.add('active');
+
+      // Adiciona active ao pane correspondente
+      const targetPane = document.getElementById(`tab-${targetTab}`);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+    });
   });
 
-  // Placeholder for 3D Statue logic or other interactions
   console.log('Oscar 2026 Page Loaded');
 
-  // Simple Parallax Effect for Hero
+  // ==========================================
+  // PARALLAX - Hero Elements with Smooth Interpolation
+  // ==========================================
   const heroBg = document.querySelector('.hero-bg');
-  const heroContent = document.querySelector('.hero-content');
+  const heroTextOverlay = document.querySelector('.hero-text-overlay');
+  const heroDate = document.querySelector('.hero-date');
+  const heroHeadline = document.querySelector('.hero-headline');
+  const heroSubheadline = document.querySelector('.hero-subheadline');
+  const heroBtn = document.querySelector('.hero .btn');
+  const heroLogo = document.querySelector('.hero-logo');
+  const scrollIndicator = document.querySelector('.scroll-indicator');
 
-  window.addEventListener('scroll', () => {
+  // Current smooth values
+  let smoothValues = {
+    bgY: 0, bgScale: 1,
+    overlayOpacity: 1,
+    logoY: 0, logoOpacity: 1,
+    dateY: 0, dateOpacity: 1,
+    headlineY: 0, headlineOpacity: 1,
+    subheadlineY: 0, subheadlineOpacity: 1,
+    btnY: 0, btnOpacity: 1,
+    scrollOpacity: 1
+  };
+
+  // Target values (from scroll)
+  let targetValues = { ...smoothValues };
+
+  // Lerp function for smooth interpolation
+  const lerp = (start, end, factor) => start + (end - start) * factor;
+  const smoothFactor = 0.08; // Lower = smoother but slower
+
+  function updateParallax() {
     const scrollY = window.scrollY;
+    const heroHeight = window.innerHeight;
 
-    if (scrollY < window.innerHeight) {
-      // Background moves slower (distance * 0.5)
-      if (heroBg) heroBg.style.transform = `translateY(${scrollY * 0.5}px)`;
+    if (scrollY < heroHeight) {
+      const progress = scrollY / heroHeight;
 
-      // Content moves slightly faster/fades (optional, but requested in layout)
-      if (heroContent) {
-        heroContent.style.transform = `translateY(${scrollY * 0.2}px)`;
-        heroContent.style.opacity = 1 - (scrollY / 700);
+      // Set target values
+      targetValues.bgY = scrollY * 0.4;
+      targetValues.bgScale = 1 + scrollY * 0.0003;
+
+      // Overlay fades out as user scrolls (reveals statue)
+      targetValues.overlayOpacity = Math.max(0, 1 - progress * 1.8);
+
+      // Logo
+      targetValues.logoY = scrollY * 0.9;
+      targetValues.logoOpacity = Math.max(0, 1 - progress * 1.6);
+
+      targetValues.dateY = scrollY * 0.8;
+      targetValues.dateOpacity = Math.max(0, 1 - progress * 1.5);
+
+      targetValues.headlineY = scrollY * 0.4;
+      targetValues.headlineOpacity = Math.max(0, 1 - progress * 1.2);
+
+      targetValues.subheadlineY = scrollY * 0.3;
+      targetValues.subheadlineOpacity = Math.max(0, 1 - progress * 1.3);
+
+      targetValues.btnY = scrollY * 0.2;
+      targetValues.btnOpacity = Math.max(0, 1 - progress * 1.4);
+
+      targetValues.scrollOpacity = Math.max(0, 1 - progress * 2);
+    }
+  }
+
+  function animateParallax() {
+    // Smooth interpolation towards target values
+    smoothValues.bgY = lerp(smoothValues.bgY, targetValues.bgY, smoothFactor);
+    smoothValues.bgScale = lerp(smoothValues.bgScale, targetValues.bgScale, smoothFactor);
+
+    smoothValues.overlayOpacity = lerp(smoothValues.overlayOpacity, targetValues.overlayOpacity, smoothFactor);
+
+    smoothValues.logoY = lerp(smoothValues.logoY, targetValues.logoY, smoothFactor);
+    smoothValues.logoOpacity = lerp(smoothValues.logoOpacity, targetValues.logoOpacity, smoothFactor);
+
+    smoothValues.dateY = lerp(smoothValues.dateY, targetValues.dateY, smoothFactor);
+    smoothValues.dateOpacity = lerp(smoothValues.dateOpacity, targetValues.dateOpacity, smoothFactor);
+
+    smoothValues.headlineY = lerp(smoothValues.headlineY, targetValues.headlineY, smoothFactor);
+    smoothValues.headlineOpacity = lerp(smoothValues.headlineOpacity, targetValues.headlineOpacity, smoothFactor);
+
+    smoothValues.subheadlineY = lerp(smoothValues.subheadlineY, targetValues.subheadlineY, smoothFactor);
+    smoothValues.subheadlineOpacity = lerp(smoothValues.subheadlineOpacity, targetValues.subheadlineOpacity, smoothFactor);
+
+    smoothValues.btnY = lerp(smoothValues.btnY, targetValues.btnY, smoothFactor);
+    smoothValues.btnOpacity = lerp(smoothValues.btnOpacity, targetValues.btnOpacity, smoothFactor);
+
+    smoothValues.scrollOpacity = lerp(smoothValues.scrollOpacity, targetValues.scrollOpacity, smoothFactor);
+
+    // Apply smooth values to elements
+    if (heroBg) {
+      heroBg.style.transform = `translateY(${smoothValues.bgY}px) scale(${smoothValues.bgScale})`;
+    }
+    if (heroTextOverlay) {
+      heroTextOverlay.style.opacity = smoothValues.overlayOpacity;
+    }
+    if (heroLogo) {
+      heroLogo.style.transform = `translateY(${smoothValues.logoY}px)`;
+      heroLogo.style.opacity = smoothValues.logoOpacity;
+    }
+    if (heroDate) {
+      heroDate.style.transform = `translateY(${smoothValues.dateY}px)`;
+      heroDate.style.opacity = smoothValues.dateOpacity;
+    }
+    if (heroHeadline) {
+      heroHeadline.style.transform = `translateY(${smoothValues.headlineY}px)`;
+      heroHeadline.style.opacity = smoothValues.headlineOpacity;
+    }
+    if (heroSubheadline) {
+      heroSubheadline.style.transform = `translateY(${smoothValues.subheadlineY}px)`;
+      heroSubheadline.style.opacity = smoothValues.subheadlineOpacity;
+    }
+    if (heroBtn) {
+      heroBtn.style.transform = `translateY(${smoothValues.btnY}px)`;
+      heroBtn.style.opacity = smoothValues.btnOpacity;
+    }
+    if (scrollIndicator) {
+      scrollIndicator.style.opacity = smoothValues.scrollOpacity;
+    }
+
+    requestAnimationFrame(animateParallax);
+  }
+
+  // Start parallax animation loop
+  window.addEventListener('scroll', updateParallax);
+  animateParallax();
+
+  // ==========================================
+  // GOLDEN PARTICLES SYSTEM
+  // ==========================================
+  class GoldenParticles {
+    constructor(canvasId, options = {}) {
+      this.canvas = document.getElementById(canvasId);
+      if (!this.canvas) return;
+
+      this.ctx = this.canvas.getContext('2d');
+      this.particles = [];
+      this.particleCount = options.count || 50;
+      this.colors = options.colors || ['#f4d03f', '#d4a017', '#cfb26f', '#a98f37', '#8c7325'];
+      this.maxSize = options.maxSize || 4;
+      this.minSize = options.minSize || 1;
+      this.speed = options.speed || 0.5;
+
+      this.resize();
+      this.init();
+      this.animate();
+
+      window.addEventListener('resize', () => this.resize());
+    }
+
+    resize() {
+      const parent = this.canvas.parentElement;
+      this.canvas.width = parent.offsetWidth;
+      this.canvas.height = parent.offsetHeight;
+    }
+
+    init() {
+      this.particles = [];
+      for (let i = 0; i < this.particleCount; i++) {
+        this.particles.push(this.createParticle());
       }
     }
+
+    createParticle(atTop = false) {
+      return {
+        x: Math.random() * this.canvas.width,
+        y: atTop ? -10 : Math.random() * this.canvas.height,
+        size: Math.random() * (this.maxSize - this.minSize) + this.minSize,
+        speedY: Math.random() * this.speed + 0.2,
+        speedX: (Math.random() - 0.5) * 0.5,
+        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+        opacity: Math.random() * 0.6 + 0.2,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: Math.random() * 0.02 + 0.01
+      };
+    }
+
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      this.particles.forEach((p, index) => {
+        // Update position
+        p.y += p.speedY;
+        p.wobble += p.wobbleSpeed;
+        p.x += p.speedX + Math.sin(p.wobble) * 0.5;
+
+        // Reset if out of bounds
+        if (p.y > this.canvas.height + 10 || p.x < -10 || p.x > this.canvas.width + 10) {
+          this.particles[index] = this.createParticle(true);
+        }
+
+        // Draw particle
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        this.ctx.fillStyle = p.color;
+        this.ctx.globalAlpha = p.opacity;
+        this.ctx.fill();
+
+        // Add glow effect
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = p.color;
+      });
+
+      this.ctx.globalAlpha = 1;
+      this.ctx.shadowBlur = 0;
+
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+
+  // Initialize particles on hero
+  new GoldenParticles('particles-hero', {
+    count: 60,
+    maxSize: 3,
+    speed: 0.4
+  });
+
+  // Initialize particles on nominees section
+  new GoldenParticles('particles-nominees', {
+    count: 40,
+    maxSize: 2.5,
+    speed: 0.3,
+    colors: ['#f4d03f', '#d4a017', '#cfb26f']
   });
 
 });
