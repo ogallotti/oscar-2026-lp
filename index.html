@@ -1241,8 +1241,11 @@
 
     <!-- Estatueta Oscar 3D -->
     <div class="oscar-statue" id="oscar-statue">
-      <img src="/.netlify/images?url=/images/statue.png&w=600&q=80" alt="Oscar Statue" class="oscar-static-img"
-        width="600" height="800" fetchpriority="high" loading="eager"
+      <img src="/.netlify/images?url=/images/statue.png&w=600&q=80" srcset="/.netlify/images?url=/images/statue.png&w=400&q=80 400w,
+                /.netlify/images?url=/images/statue.png&w=600&q=80 600w,
+                /.netlify/images?url=/images/statue.png&w=800&q=80 800w,
+                /.netlify/images?url=/images/statue.png&w=1200&q=80 1200w" sizes="(max-aspect-ratio: 3/4) 100vw, 80vh"
+        alt="Oscar Statue" class="oscar-static-img" width="600" height="800" fetchpriority="high" loading="eager"
         style="width: 100%; height: 100%; object-fit: contain; opacity: 1;">
       <canvas id="oscar-3d-canvas" style="opacity: 0; transition: opacity 1s ease;"></canvas>
     </div>
@@ -1297,8 +1300,8 @@
             <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" srcset="/.netlify/images?url=/images/conan_host.png&w=300&q=80 300w,
                       /.netlify/images?url=/images/conan_host.png&w=600&q=80 600w,
                       /.netlify/images?url=/images/conan_host.png&w=900&q=80 900w"
-              sizes="(max-width: 900px) 100vw, 50vw" width="600" height="800" loading="lazy" style="height: auto;"
-              alt="Conan O'Brien apresentando o Oscar" class="intro-image">
+              sizes="(max-width: 768px) calc(100vw - 4rem), (max-width: 1200px) 50vw, 600px" width="600" height="800"
+              loading="lazy" style="height: auto;" alt="Conan O'Brien apresentando o Oscar" class="intro-image">
           </div>
         </div>
       </div>
