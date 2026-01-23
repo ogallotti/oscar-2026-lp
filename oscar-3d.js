@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const debugDiv = document.createElement('div');
     debugDiv.style.position = 'fixed';
-    debugDiv.style.top = '10px';
+    debugDiv.style.bottom = '10px'; // Move to bottom
     debugDiv.style.left = '10px';
     debugDiv.style.background = 'rgba(0,0,0,0.8)';
     debugDiv.style.color = 'lime';
@@ -313,13 +313,15 @@ document.addEventListener('DOMContentLoaded', () => {
     debugDiv.innerHTML = 'Scroll: 0';
     document.body.appendChild(debugDiv);
 
+    const heroEl = document.querySelector('.hero');
+
     function updateDebug() {
         const winY = window.pageYOffset;
         const htmlY = document.documentElement.scrollTop;
         const bodyY = document.body.scrollTop;
-        const winH = window.innerHeight;
+        const heroTop = heroEl ? Math.round(heroEl.getBoundingClientRect().top) : 0;
 
-        debugDiv.innerHTML = `W:${Math.round(winY)} H:${Math.round(htmlY)} B:${Math.round(bodyY)} VH:${winH}`;
+        debugDiv.innerHTML = `W:${Math.round(winY)} H:${Math.round(htmlY)} B:${Math.round(bodyY)} HeroTop:${heroTop}`;
         requestAnimationFrame(updateDebug);
     }
     updateDebug();
