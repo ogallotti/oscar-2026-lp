@@ -302,8 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const debugDiv = document.createElement('div');
     debugDiv.style.position = 'fixed';
-    debugDiv.style.bottom = '10px'; // Move to bottom
-    debugDiv.style.left = '10px';
+    debugDiv.style.top = '100px'; // Move to top (below header/address bar)
+    debugDiv.style.right = '10px'; // Move to right
     debugDiv.style.background = 'rgba(0,0,0,0.8)';
     debugDiv.style.color = 'lime';
     debugDiv.style.padding = '5px';
