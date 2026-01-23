@@ -263,17 +263,19 @@ img {
   letter-spacing: 0.2em;
   color: var(--color-gold);
   margin-bottom: 2.5rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.5s forwards;
+  color: var(--color-gold);
+  margin-bottom: 2.5rem;
+  /* Removed animation for LCP */
 }
 
 .hero-logo {
   width: 60px;
   height: auto;
   margin-bottom: 2rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 0.3s forwards;
+  height: auto;
+  margin-bottom: 2rem;
   filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
+  /* Removed animation for LCP */
 }
 
 .hero-title-wrapper {
@@ -294,9 +296,9 @@ img {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 1s ease 0.7s forwards;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  /* Removed animation for LCP */
 }
 
 .line-2 {
@@ -305,9 +307,9 @@ img {
   font-size: clamp(4rem, 12vw, 9rem);
   font-weight: 400;
   color: var(--color-gold-light);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFade 1s ease 0.9s forwards;
+  font-weight: 400;
+  color: var(--color-gold-light);
+  /* Removed animation for LCP */
 }
 
 .hero-subheadline {
@@ -316,14 +318,12 @@ img {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 3rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 1.1s forwards;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3rem;
+  /* Removed animation for LCP */
 }
 
-.hero .btn {
-  opacity: 0;
-  animation: fadeIn 1s ease 1.3s forwards;
-}
+/* Removed .hero .btn animation */
 
 /* Scroll Indication */
 .scroll-indicator {
@@ -507,6 +507,7 @@ img {
   display: flex;
   gap: 2rem;
   animation: ticker-scroll 45s linear infinite;
+  will-change: transform;
   width: max-content;
 }
 
@@ -1185,5 +1186,26 @@ img {
     text-align: center;
     width: 100%;
     display: block;
+  }
+}
+
+/* ==========================================
+   PERFORMANCE & ACCESSIBILITY
+   ========================================== */
+
+.retrospective-section,
+.nominees-section,
+.governors-section,
+.rules-section,
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Visibility API to pause animations
+  let isPageVisible = true;
+  document.addEventListener('visibilitychange', () => {
+    isPageVisible = !document.hidden;
+  });
+
   // Initialize AOS (Animate On Scroll)
   AOS.init({
     duration: 800,
@@ -100,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function animateParallax() {
+    if (!isPageVisible) {
+      requestAnimationFrame(animateParallax);
+      return;
+    }
+
     // Smooth interpolation towards target values
     smoothValues.bgY = lerp(smoothValues.bgY, targetValues.bgY, smoothFactor);
     smoothValues.bgScale = lerp(smoothValues.bgScale, targetValues.bgScale, smoothFactor);
@@ -212,6 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     animate() {
+      if (!isPageVisible) {
+        requestAnimationFrame(() => this.animate());
+        return;
+      }
+
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.particles.forEach((p, index) => {

@@ -2,382 +2,294 @@
 description: otimizar
 ---
 
-# Instruções
+# Workflow: Otimizar Performance
 
-Você vai otimizar a performance da landing page para melhorar o score no PageSpeed Insights. Meta: **Score 90+ em Performance**.
-
-## Antes de Começar
-
-Leia o `index.html` e `style.css` atuais para analisar o que precisa ser otimizado.
+Meta: **Score 90+ no PageSpeed** e **60 FPS constantes**.
 
 ---
 
-## 1. LCP / Imagens (Maior Impacto)
+# FASE 1: AUDITORIA (OBRIGATÓRIA)
 
-### Preload de Recursos Críticos
+**NUNCA corrija antes de completar a auditoria.**
 
-```html
-<head>
-  <!-- Logo com alta prioridade -->
-  <link rel="preload" href="/images/logo.svg" as="image" fetchpriority="high">
+## Passo 1: Ler Todos os Arquivos
 
-  <!-- Foto hero com srcset responsivo -->
-  <link rel="preload" as="image"
-    href="/.netlify/images?url=/images/hero.jpg&w=1200&q=80"
-    imagesrcset="
-      /.netlify/images?url=/images/hero.jpg&w=640&q=80 640w,
-      /.netlify/images?url=/images/hero.jpg&w=1200&q=80 1200w,
-      /.netlify/images?url=/images/hero.jpg&w=1920&q=80 1920w"
-    imagesizes="(max-width: 768px) 100vw, 50vw">
-</head>
-```
+Leia COMPLETAMENTE: `index.html`, `style.css`, `script.js` e qualquer CSS/JS linkado.
 
-### Checklist de Imagens
+## Passo 2: Identificar TODOS os Problemas
 
-- [ ] TODAS usando Netlify CDN: `/.netlify/images?url=/images/foto.jpg&w=800&q=80`
-- [ ] Qualidade `q=80` (bom equilíbrio entre qualidade e tamanho)
-- [ ] Todas com `width` e `height` explícitos
-- [ ] Imagens críticas com `aspect-ratio` no CSS
-- [ ] Hero: `loading="eager"` e `fetchpriority="high"`
-- [ ] Demais: `loading="lazy"`
-- [ ] Alt descritivo ou vazio (`alt=""` para decorativas)
+### 2.1 Imagens (verificar TODAS)
 
-### Exemplo de Imagem Hero Otimizada
+Para CADA `<img>`:
+- [ ] Usa Netlify CDN? (`/.netlify/images?url=...&w=X&q=80`)
+- [ ] `width` numérico? (NUNCA "auto")
+- [ ] `height` numérico? (NUNCA "auto")
+- [ ] `loading` correto? (eager hero, lazy resto)
 
-```html
-<img
-  src="/.netlify/images?url=/images/hero.jpg&w=1200&q=80"
-  srcset="
-    /.netlify/images?url=/images/hero.jpg&w=640&q=80 640w,
-    /.netlify/images?url=/images/hero.jpg&w=1200&q=80 1200w,
-    /.netlify/images?url=/images/hero.jpg&w=1920&q=80 1920w"
-  sizes="(max-width: 768px) 100vw, 50vw"
-  width="1200"
-  height="800"
-  alt="Descrição"
-  loading="eager"
-  fetchpriority="high"
-  style="aspect-ratio: 3/2;"
->
-```
+### 2.2 CSS
+
+- [ ] CSS externo blocante? (sem `media="print" onload`)
+- [ ] Bibliotecas CSS não usadas? (Swiper, Bootstrap)
+- [ ] Falta critical CSS inline?
+
+### 2.3 Scripts
+
+Para CADA `<script>`:
+- [ ] Tem `defer`/`async`?
+- [ ] Biblioteca removível?
+- [ ] Versão minificada? (.min.js)
+
+### 2.4 Hero/LCP
+
+- [ ] `opacity: 0` inicial?
+- [ ] `data-aos`?
+- [ ] Animação de entrada CSS?
+
+### 2.5 Resource Hints
+
+- [ ] Falta preconnect fonts?
+- [ ] Falta dns-prefetch analytics?
+- [ ] Falta preload hero image?
+
+### 2.6 Fontes
+
+- [ ] Weights > 3?
+- [ ] Tem `display=swap`?
+
+### 2.7 Third-Party
+
+- [ ] Analytics carrega imediatamente?
+
+### 2.8 JS Runtime (se animações)
+
+- [ ] Múltiplos RAF loops? (deve ser 1)
+- [ ] Scroll sem throttle?
+- [ ] Não pausa off-screen/tab inativa?
+
+### 2.9 CSS Animations
+
+- [ ] `will-change` permanente?
+- [ ] `filter: grayscale()` hover?
+
+### 2.10 Canvas (se houver)
+
+- [ ] `shadowBlur`?
+- [ ] Partículas > 40?
+
+### 2.11 Three.js (se houver)
+
+- [ ] GLB > 500KB sem Draco?
+- [ ] Three.js não minificado?
+- [ ] Luzes > 3?
+- [ ] Antialias on mobile?
+
+### 2.12 Vídeos/Iframes
+
+- [ ] Vídeos sem `poster`/`preload="none"`?
+- [ ] Iframes sem `loading="lazy"`?
+
+## Passo 3: Apresentar Relatório
+
+1. **Resumo**: X problemas
+2. **Lista** por categoria com impacto:
+   - CRÍTICO: LCP/TBT (imagens, CSS blocante, scripts)
+   - ALTO: Métricas secundárias (hero animação, fonts)
+   - MÉDIO: Runtime/FPS (RAF, will-change)
+   - BAIXO: Incrementais (preconnect)
+
+**Aguarde aprovação antes de corrigir.**
 
 ---
 
-## 2. CSS Crítico
+# FASE 2: CORREÇÕES
 
-### Inline no Head (Completo)
+## Regras Críticas
 
-O CSS crítico deve incluir **TUDO** que aparece acima da dobra:
-- Reset básico
-- Container
-- Hero completo
-- Logo (incluindo `filter: drop-shadow` se houver)
-- Floating icons (se visíveis no hero)
-- Botão CTA
-- Cores e tipografia do hero
+1. **Exaustivo**: Corrigir TODAS as imagens, não algumas
+2. **Completo**: Remover biblioteca = CSS + JS + código dependente + classes HTML
+3. **Numérico**: width/height = NÚMEROS (nunca "auto", "100%")
+4. **Verificar**: Após cada categoria, confirmar que TODOS itens foram corrigidos
+
+---
+
+## 1. Imagens
+
+```html
+<!-- CORRETO -->
+<img src="/.netlify/images?url=/images/foto.jpg&w=600&q=80"
+     width="600" height="400" loading="lazy">
+
+<!-- Hero -->
+<img ... loading="eager" fetchpriority="high">
+```
+
+Srcset para imagens grandes:
+```html
+srcset="/.netlify/images?url=/img.jpg&w=400&q=80 400w,
+        /.netlify/images?url=/img.jpg&w=800&q=80 800w"
+sizes="(max-width: 768px) 100vw, 50vw"
+```
+
+## 2. Resource Hints
 
 ```html
 <head>
-  <style>
-    /* Reset mínimo */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Container */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-    /* Hero */
-    .hero { min-height: 100vh; display: flex; align-items: center; }
-    .hero-content { /* estilos */ }
-    .hero-title { /* estilos */ }
-    .hero-subtitle { /* estilos */ }
-
-    /* Logo - incluir drop-shadow se existir */
-    .logo { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-
-    /* CTA Button */
-    .cta-button { /* estilos completos */ }
-
-    /* Floating Icons (se visíveis no hero) */
-    .floating-icons { /* estilos */ }
-  </style>
-
-  <!-- CSS restante com carregamento async -->
-  <link rel="preload" href="/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="/style.css"></noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//www.google-analytics.com">
+  <link rel="preload" href="/.netlify/images?url=/images/hero.jpg&w=1200&q=80" as="image">
 </head>
 ```
 
-### Carregamento Async do CSS
-
-Técnica com `media="print"`:
+## 3. Fontes
 
 ```html
+<!-- Max 2-3 weights, sempre display=swap -->
+<link href="...?family=Font:wght@400;700&display=swap">
+```
+
+## 4. CSS
+
+```html
+<!-- Async loading -->
 <link rel="stylesheet" href="/style.css" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="/style.css"></noscript>
 ```
 
-### Minificação
+Critical CSS inline no `<head>` para hero.
 
-- Remover comentários
-- Remover espaços em branco desnecessários
-- Pode usar ferramentas online como cssnano ou clean-css
-- Meta: reduzir ~30% do tamanho
+## 5. Hero (LCP)
 
----
+Remover do hero:
+- `opacity: 0` inicial
+- `data-aos`
+- Animações de entrada
 
-## 3. Animações do Hero
-
-### REMOVER Animações de Entrada no Hero
-
-O hero deve renderizar **instantaneamente**. Remova:
-
-- [ ] `fadeInUp` da logo
-- [ ] `fadeInUp` do h1
-- [ ] `fadeInUp` do p / subtitle
-- [ ] `fadeInUp` do cta-button
-- [ ] `fadeInUp` das hero-tags
-- [ ] `fadeInRight` do hero-image-container
-- [ ] Qualquer `opacity: 0` inicial no hero
-- [ ] Qualquer `transform: translateY()` inicial
-- [ ] Atributos `data-aos` no hero
-
-**Animações PÓS-LOAD são permitidas** (hover, scroll-triggered em outras seções).
-
----
-
-## 4. Facebook Pixel (se houver)
-
-### Carregamento Otimizado
+## 6. Scripts
 
 ```html
-<script>
-// Facebook Pixel com carregamento inteligente
-(function() {
-  var pixelLoaded = false;
-
-  function loadPixel() {
-    if (pixelLoaded) return;
-    pixelLoaded = true;
-
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;t.defer=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'SEU_PIXEL_ID');
-    fbq('track', 'PageView');
-  }
-
-  // Carregar apenas na interação ou após 4s
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(function() {
-      setTimeout(loadPixel, 4000);
-    });
-  } else {
-    setTimeout(loadPixel, 4000);
-  }
-
-  // Ou na primeira interação
-  ['scroll', 'click', 'touchstart'].forEach(function(event) {
-    window.addEventListener(event, loadPixel, { once: true, passive: true });
-  });
-})();
-</script>
+<script src="/script.js" defer></script>
 ```
 
-### DNS Prefetch (não preconnect)
+Substituir: jQuery → Vanilla, Swiper → CSS, Moment → Intl API
+
+## 7. Third-Party
+
+```javascript
+let loaded = false;
+function loadScripts() {
+  if (loaded) return;
+  loaded = true;
+  // Analytics, pixels, etc
+}
+['scroll','click','touchstart'].forEach(e =>
+  addEventListener(e, loadScripts, { once: true, passive: true })
+);
+setTimeout(loadScripts, 4000);
+```
+
+## 8. Vídeos
 
 ```html
-<head>
-  <!-- DNS prefetch ao invés de preconnect para Facebook -->
-  <link rel="dns-prefetch" href="//connect.facebook.net">
-  <link rel="dns-prefetch" href="//www.facebook.com">
-</head>
+<video poster="poster.jpg" preload="none">
+  <source src="video.webm" type="video/webm">
+</video>
 ```
 
----
-
-## 5. Preconnects e DNS Prefetch
-
-### Ordem de Prioridade
+## 9. Iframes
 
 ```html
-<head>
-  <!-- Críticos: preconnect (com crossorigin quando necessário) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com">
-
-  <!-- Não-críticos: dns-prefetch -->
-  <link rel="dns-prefetch" href="//connect.facebook.net">
-  <link rel="dns-prefetch" href="//www.facebook.com">
-  <link rel="dns-prefetch" href="//www.googletagmanager.com">
-</head>
+<iframe src="..." loading="lazy"></iframe>
 ```
 
----
-
-## 6. Fontes
-
-### Preload da Fonte Principal
-
-```html
-<head>
-  <!-- Preload da fonte mais usada (geralmente bold/700) -->
-  <link rel="preload"
-    href="https://fonts.gstatic.com/s/montserrat/v26/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuM70w-Y3tcoqK5.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin>
-
-  <!-- Google Fonts com display=swap -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-```
-
-### Como Encontrar a URL da Fonte
-
-1. Abra o DevTools > Network
-2. Filtre por "Font"
-3. Carregue a página
-4. Copie a URL da fonte .woff2 mais usada
-
----
-
-## 7. Main Thread / Otimizações de Layout
-
-### Content-Visibility para Seções Below-Fold
+## 10. Content-Visibility
 
 ```css
-/* Seções que não aparecem no carregamento inicial */
-.benefits,
-.testimonials,
-.pricing,
-.faq,
-.contact,
-footer {
+.section-below-fold {
   content-visibility: auto;
-  contain-intrinsic-size: 0 500px; /* altura estimada */
+  contain-intrinsic-size: 0 500px;
 }
 ```
 
-### CSS Containment
+## 11. Acessibilidade
 
 ```css
-/* Isolar seções para melhor performance de layout */
-section {
-  contain: layout style;
-}
-
-/* Para elementos com tamanho fixo */
-.card {
-  contain: layout style paint;
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; }
 }
 ```
 
 ---
 
-## 8. JavaScript
+## 12. JS Runtime (se animações)
 
-### Scripts no Final do Body
+```javascript
+// Throttle scroll
+let scheduled = false;
+addEventListener('scroll', () => {
+  if (!scheduled) {
+    requestAnimationFrame(() => { update(); scheduled = false; });
+    scheduled = true;
+  }
+}, { passive: true });
 
-```html
-  <!-- Antes de </body> -->
+// Pausar off-screen
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => e.isIntersecting ? start() : stop());
+});
 
-  <!-- Scripts críticos (se houver) -->
-  <script src="/script.js" defer></script>
-
-  <!-- Scripts não-críticos -->
-  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
-
-  <!-- AOS (se usado em seções below-fold) -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      AOS.init({ once: true, duration: 600 });
-    });
-  </script>
-</body>
+// Pausar tab inativa
+document.addEventListener('visibilitychange', () => {
+  document.hidden ? pause() : resume();
+});
 ```
 
----
+## 13. CSS Animations
 
-## Checklist Final de Otimização
+```css
+/* will-change APENAS em animações contínuas */
+.ticker { will-change: transform; }
 
-### LCP (Largest Contentful Paint)
-- [ ] Preload da logo
-- [ ] Preload da imagem hero com srcset
-- [ ] Imagens com q=80
-- [ ] width/height em todas imagens
-- [ ] aspect-ratio em imagens críticas
-- [ ] fetchpriority="high" no hero
+/* Evitar filter: grayscale() hover */
+```
 
-### CSS
-- [ ] Critical CSS inline completo
-- [ ] drop-shadow da logo no critical CSS
-- [ ] CSS restante com carregamento async
-- [ ] CSS minificado
+## 14. Canvas
 
-### Animações
-- [ ] Sem fadeInUp na logo
-- [ ] Sem fadeInUp no h1, p, cta-button, hero-tags
-- [ ] Sem fadeInRight no hero-image-container
-- [ ] Sem opacity:0 ou transform inicial no hero
+```javascript
+// Sem shadowBlur, max 40 partículas (25 mobile)
+const count = isMobile ? 25 : 40;
+```
 
-### Tracking (Facebook, etc)
-- [ ] Defer com requestIdleCallback
-- [ ] Carregamento na interação
-- [ ] Fallback de 4s
-- [ ] dns-prefetch ao invés de preconnect
+## 15. Three.js
 
-### Preconnects
-- [ ] preconnect para fonts.googleapis.com
-- [ ] preconnect para fonts.gstatic.com
-- [ ] preconnect para unpkg.com
-- [ ] dns-prefetch para serviços de tracking
+```javascript
+// Draco para GLB > 500KB
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+loader.setDRACOLoader(dracoLoader);
 
-### Fontes
-- [ ] Preload da fonte principal (700)
-- [ ] display=swap
+// Renderer mobile
+renderer = new THREE.WebGLRenderer({ antialias: !isMobile });
+renderer.setPixelRatio(isMobile ? 1 : 2);
+```
 
-### Main Thread
-- [ ] content-visibility: auto em seções below-fold
-- [ ] contain: layout style em sections
-- [ ] contain-intrinsic-size definido
+Three.js minificado: `three.module.min.js`. Max 3 luzes.
 
 ---
 
-## Sua Tarefa
+# FASE 3: VALIDAÇÃO
 
-1. Analise o código atual
-2. Identifique problemas de performance usando o checklist acima
-3. Aplique as correções necessárias na ordem de impacto:
-   - Primeiro: Imagens e LCP
-   - Segundo: CSS crítico
-   - Terceiro: Animações do hero
-   - Quarto: Scripts e tracking
-   - Quinto: Content-visibility
-4. Liste o que foi otimizado
+1. Para cada problema da auditoria, confirmar correção
+2. Relatório: CORRIGIDO vs NÃO CORRIGIDO (com motivo)
+3. Link para teste (skill `local-server`)
+4. Instruir PageSpeed: https://pagespeed.web.dev/
+5. **PARAR E AGUARDAR**
 
 ---
 
-## Ao Finalizar
+# REGRAS
 
-Após aplicar as otimizações:
-
-1. Liste o que foi otimizado (com detalhes)
-2. Forneça o link (use a skill `local-server` para obter a URL correta)
-3. Sugira testar no PageSpeed Insights: https://pagespeed.web.dev/
-4. Sugira próximo passo: "Quando estiver satisfeito, use `/publicar` para deploy."
-5. **PARE COMPLETAMENTE E AGUARDE**
-
-## IMPORTANTE: Regras de Comportamento
-
-- NUNCA faça deploy automaticamente
-- NUNCA rode `/publicar` ou `/previsualizar` automaticamente
-- Quando o usuário aprovar, apenas confirme e aguarde comando explícito
+- **NUNCA** corrija sem auditoria completa
+- **NUNCA** corrija parcialmente
+- **NUNCA** deploy automático
+- Aguarde comando explícito

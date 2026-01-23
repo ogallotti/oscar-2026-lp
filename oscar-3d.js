@@ -5,6 +5,7 @@
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 class Oscar3D {
     constructor() {
@@ -30,15 +31,15 @@ class Oscar3D {
         // Renderer with transparency
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
-            antialias: true,
+            antialias: !this.isMobile, // Optimization: Off on mobile
             alpha: true
         });
         this.renderer.setClearColor(0x000000, 0);
         this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setPixelRatio(this.isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
         this.renderer.outputColorSpace = THREE.SRGBColorSpace;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 2.8;
+        this.renderer.toneMappingExposure = 2.0;
 
         // Lighting
         this.setupLights();
@@ -84,85 +85,35 @@ class Oscar3D {
     }
 
     setupLights() {
-        // Ambient light - warm atmosphere
+        // PERFORMANCE OPTIMIZATION: Reduced from 16 lights to 3 lights + Ambient
+
+        // 1. Ambient Light (Base fill)
         const ambientLight = new THREE.AmbientLight(0xfff8e0, 1.0);
         this.scene.add(ambientLight);
 
-        // Hemisphere light
-        const hemiLight = new THREE.HemisphereLight(0xffefd5, 0x1a1210, 0.8);
-        this.scene.add(hemiLight);
-
-        // ========================
-        // SOFT LIGHTS AT 45° ABOVE
-        // ========================
-
-        const softLight1 = new THREE.DirectionalLight(0xffd700, 2.5);
-        softLight1.position.set(-3, 4, 4);
-        this.scene.add(softLight1);
-
-        const softLight2 = new THREE.DirectionalLight(0xffc800, 2.0);
-        softLight2.position.set(3, 4, 4);
-        this.scene.add(softLight2);
-
-        const softLight3 = new THREE.DirectionalLight(0xffefd5, 2.5);
-        softLight3.position.set(0, 4, 5);
-        this.scene.add(softLight3);
-
-        const softLight4 = new THREE.DirectionalLight(0xdaa520, 1.5);
-        softLight4.position.set(-4, 4, -2);
-        this.scene.add(softLight4);
-
-        const softLight5 = new THREE.DirectionalLight(0xb8860b, 1.5);
-        softLight5.position.set(4, 4, -2);
-        this.scene.add(softLight5);
-
-        // ========================
-        // KEY LIGHTS
-        // ========================
-
-        const keyLight = new THREE.DirectionalLight(0xffd700, 4);
-        keyLight.position.set(-2, 5, 6);
+        // 2. Key Light (Main Gold definition)
+        const keyLight = new THREE.DirectionalLight(0xffd700, 3.5);
+        keyLight.position.set(-2, 5, 5);
         this.scene.add(keyLight);
 
-        const keyLight2 = new THREE.DirectionalLight(0xffc800, 3);
-        keyLight2.position.set(4, 3, 5);
-        this.scene.add(keyLight2);
-
-        const topLight = new THREE.DirectionalLight(0xffffff, 2.5);
-        topLight.position.set(0, 7, 3);
-        this.scene.add(topLight);
-
-        const frontLight = new THREE.DirectionalLight(0xffefd5, 2);
-        frontLight.position.set(0, 1, 8);
-        this.scene.add(frontLight);
-
-        const rimLight = new THREE.DirectionalLight(0xffd700, 1.2);
-        rimLight.position.set(0, 2, -6);
+        // 3. Rim Light (Edge definition)
+        const rimLight = new THREE.DirectionalLight(0xffffff, 2.0);
+        rimLight.position.set(2, 3, -4);
         this.scene.add(rimLight);
 
-        const bottomLight = new THREE.DirectionalLight(0xdaa520, 1.0);
-        bottomLight.position.set(0, -3, 4);
-        this.scene.add(bottomLight);
-
-        // ========================
-        // POINT LIGHT ACCENTS
-        // ========================
-
-        const pointLight1 = new THREE.PointLight(0xffd700, 1.5, 12);
-        pointLight1.position.set(-3, 3, 3);
-        this.scene.add(pointLight1);
-
-        const pointLight2 = new THREE.PointLight(0xffc800, 1.2, 12);
-        pointLight2.position.set(3, 3, 3);
-        this.scene.add(pointLight2);
-
-        const pointLight3 = new THREE.PointLight(0xffefd5, 1.0, 10);
-        pointLight3.position.set(0, 5, 2);
-        this.scene.add(pointLight3);
+        // 4. Fill Light (Softener)
+        const fillLight = new THREE.DirectionalLight(0xffefd5, 1.5);
+        fillLight.position.set(0, -2, 4);
+        this.scene.add(fillLight);
     }
 
     loadModel() {
         const loader = new GLTFLoader();
+
+        // Draco Compression Support
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+        loader.setDRACOLoader(dracoLoader);
 
         loader.load(
             '/images/oscar_trophy.glb',
@@ -264,6 +215,9 @@ class Oscar3D {
 
     animate() {
         requestAnimationFrame(() => this.animate());
+
+        // Optimization: Pause when hidden
+        if (document.hidden) return;
 
         if (this.modelGroup && this.model) {
             const scrollY = window.pageYOffset || document.documentElement.scrollTop;

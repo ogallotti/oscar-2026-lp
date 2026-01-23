@@ -11,18 +11,22 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" as="image">
   <link
     href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet">
 
   <!-- AOS -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  </noscript>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="style.css">
+  </noscript>
 </head>
 
 <body>
@@ -42,7 +46,8 @@
     </div>
 
     <div class="container hero-content">
-      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo">
+      <img src="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" alt="Oscar Logo" class="hero-logo" width="60"
+        height="60" loading="eager" fetchpriority="high">
       <p class="hero-date">Domingo, 15 de Março de 2026</p>
 
       <div class="hero-title-wrapper">
@@ -88,7 +93,7 @@
           <!-- Stylized Frame -->
           <div class="visual-frame">
             <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" alt="Conan O'Brien apresentando o Oscar"
-              class="intro-image">
+              class="intro-image" width="600" height="400" loading="lazy">
           </div>
         </div>
       </div>
@@ -273,7 +278,8 @@
             <div class="nominees-grid grid-posters">
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/625400-bugonia-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/625400-bugonia-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Bugonia</h4>
                   <p class="nominee-meta">Ed Guiney, Andrew Lowe, Yorgos Lanthimos, Emma Stone, Lars Knudsen</p>
@@ -281,7 +287,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/817977-f1-the-movie-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/817977-f1-the-movie-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">F1</h4>
                   <p class="nominee-meta">Chad Oman, Brad Pitt, Dede Gardner, Jeremy Kleiner, Joseph Kosinski, Jerry
@@ -290,7 +297,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/958100-frankenstein-2025-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/958100-frankenstein-2025-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Frankenstein</h4>
                   <p class="nominee-meta">Guillermo del Toro, J. Miles Dale, Scott Stuber</p>
@@ -298,7 +306,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/772232-hamnet-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/772232-hamnet-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Hamnet</h4>
                   <p class="nominee-meta">Liza Marshall, Pippa Harris, Nicolas Gonda, Steven Spielberg, Sam Mendes</p>
@@ -306,7 +315,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1197499-marty-supreme-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1197499-marty-supreme-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Marty Supreme</h4>
                   <p class="nominee-meta">Eli Bush, Ronald Bronstein, Josh Safdie, Anthony Katagas, Timothée Chalamet
@@ -315,7 +325,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/951277-one-battle-after-another-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/951277-one-battle-after-another-0-460-0-690-crop.jpg&w=400&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">One Battle after Another</h4>
@@ -324,7 +334,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1104348-the-secret-agent-2025-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1104348-the-secret-agent-2025-0-460-0-690-crop.jpg&w=400&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">The Secret Agent</h4>
@@ -333,7 +343,7 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1013357-sentimental-value-2025-0-460-0-690-crop.jpg');">
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1013357-sentimental-value-2025-0-460-0-690-crop.jpg&w=400&q=80');">
                 </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Sentimental Value</h4>
@@ -342,7 +352,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1116600-sinners-2025-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1116600-sinners-2025-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Sinners</h4>
                   <p class="nominee-meta">Zinzi Coogler, Sev Ohanian, Ryan Coogler</p>
@@ -350,7 +361,8 @@
               </div>
               <div class="nominee-card">
                 <div class="nominee-poster"
-                  style="background-image: url('images/nominees/1125383-train-dreams-0-460-0-690-crop.jpg');"></div>
+                  style="background-image: url('/.netlify/images?url=/images/nominees/1125383-train-dreams-0-460-0-690-crop.jpg&w=400&q=80');">
+                </div>
                 <div class="nominee-info">
                   <h4 class="nominee-title">Train Dreams</h4>
                   <p class="nominee-meta">Marissa McMahon, Teddy Schwarzman, Will Janowitz, Ashley Schlaifer, Michael
@@ -731,7 +743,8 @@
           <h3 class="governors-column-title text-center" data-aos="fade-up">Oscar Honorário</h3>
           <div class="governors-grid">
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="100">
-              <div class="governor-image-rect" style="background-image: url('images/governors_debbie_allen.png');">
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_debbie_allen.png&w=400&q=80');">
               </div>
               <div class="governor-info">
                 <h4 class="governor-name">Debbie Allen</h4>
@@ -739,7 +752,9 @@
               </div>
             </div>
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="200">
-              <div class="governor-image-rect" style="background-image: url('images/governors_tom_cruise.png');"></div>
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_tom_cruise.png&w=400&q=80');">
+              </div>
               <div class="governor-info">
                 <h4 class="governor-name">Tom Cruise</h4>
                 <p class="governor-desc">Pelo comprometimento inabalável com a comunidade cinematográfica e de dublês
@@ -747,7 +762,9 @@
               </div>
             </div>
             <div class="governor-card-large featured" data-aos="fade-up" data-aos-delay="300">
-              <div class="governor-image-rect" style="background-image: url('images/governors_wynn_thomas.png');"></div>
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_wynn_thomas.png&w=400&q=80');">
+              </div>
               <div class="governor-info">
                 <h4 class="governor-name">Wynn Thomas</h4>
                 <p class="governor-desc">Visionário designer de produção</p>
@@ -761,7 +778,8 @@
           <h3 class="governors-column-title text-center" data-aos="fade-up">Prêmio Humanitário Jean Hersholt</h3>
           <div class="governors-centered" data-aos="fade-up" data-aos-delay="400">
             <div class="governor-card-large featured">
-              <div class="governor-image-rect" style="background-image: url('images/governors_dolly_parton.png');">
+              <div class="governor-image-rect"
+                style="background-image: url('/.netlify/images?url=/images/governors_dolly_parton.png&w=400&q=80');">
               </div>
               <div class="governor-info">
                 <h4 class="governor-name">Dolly Parton</h4>
@@ -805,7 +823,8 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-logo">
-        <img src="/.netlify/images?url=/images/logo-typography.png&w=200&q=80" alt="Oscars" class="footer-logo-img">
+        <img src="/.netlify/images?url=/images/logo-typography.png&w=200&q=80" alt="Oscars" class="footer-logo-img"
+          width="200" height="60" loading="lazy">
       </div>
       <div class="footer-links">
         <a href="#">Imprensa</a>
@@ -818,8 +837,8 @@
 
 
   <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
 
   <!-- Three.js -->
   <script type="importmap">
@@ -831,7 +850,7 @@
   }
   </script>
   <script type="module" src="oscar-3d.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 
 </body>
 
