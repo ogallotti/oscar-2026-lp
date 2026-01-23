@@ -9,6 +9,14 @@
   <link rel="icon" type="image/png" href="/images/logo-icon.png">
 
   <link rel="preload" href="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" as="image" fetchpriority="high">
+  <link rel="preload" as="image" fetchpriority="high" href="/.netlify/images?url=/images/statue.png&w=600&q=80"
+    imagesrcset="/.netlify/images?url=/images/statue.png&w=400&q=80 400w,
+                 /.netlify/images?url=/images/statue.png&w=500&q=80 500w,
+                 /.netlify/images?url=/images/statue.png&w=600&q=80 600w,
+                 /.netlify/images?url=/images/statue.png&w=700&q=80 700w,
+                 /.netlify/images?url=/images/statue.png&w=800&q=80 800w,
+                 /.netlify/images?url=/images/statue.png&w=1200&q=80 1200w"
+    imagesizes="(max-aspect-ratio: 3/4) 100vw, 80vh">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,12 +38,7 @@
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
   </noscript>
 
-  <!-- Swiper CSS (Async) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
-    onload="this.media='all'" />
-  <noscript>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  </noscript>
+
 
   <style>
     /* ==========================================
@@ -1242,7 +1245,9 @@
     <!-- Estatueta Oscar 3D -->
     <div class="oscar-statue" id="oscar-statue">
       <img src="/.netlify/images?url=/images/statue.png&w=600&q=80" srcset="/.netlify/images?url=/images/statue.png&w=400&q=80 400w,
+                /.netlify/images?url=/images/statue.png&w=500&q=80 500w,
                 /.netlify/images?url=/images/statue.png&w=600&q=80 600w,
+                /.netlify/images?url=/images/statue.png&w=700&q=80 700w,
                 /.netlify/images?url=/images/statue.png&w=800&q=80 800w,
                 /.netlify/images?url=/images/statue.png&w=1200&q=80 1200w" sizes="(max-aspect-ratio: 3/4) 100vw, 80vh"
         alt="Oscar Statue" class="oscar-static-img" width="600" height="800" fetchpriority="high" loading="eager"
@@ -1298,6 +1303,7 @@
           <!-- Stylized Frame -->
           <div class="visual-frame">
             <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" srcset="/.netlify/images?url=/images/conan_host.png&w=300&q=80 300w,
+                      /.netlify/images?url=/images/conan_host.png&w=450&q=80 450w,
                       /.netlify/images?url=/images/conan_host.png&w=600&q=80 600w,
                       /.netlify/images?url=/images/conan_host.png&w=900&q=80 900w"
               sizes="(max-width: 768px) calc(100vw - 4rem), (max-width: 1200px) 50vw, 600px" width="600" height="800"
@@ -2046,7 +2052,7 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
 
   <!-- Three.js -->
   <script type="importmap">
