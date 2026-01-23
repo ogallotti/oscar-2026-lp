@@ -21,7 +21,7 @@
   --color-text-light: #ffffff;
 
   /* Fonts */
-  --font-display: 'Bodoni Moda', serif;
+  --font-display: 'Cormorant Garamond', serif;
   --font-serif-alt: 'Instrument Serif', serif;
   --font-sans: 'Inter', sans-serif;
 }
@@ -41,6 +41,7 @@
 html {
   /* scroll-behavior: smooth;  REMOVED to prevent parallax lag */
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -51,6 +52,8 @@ body {
   /* Light bg */
   color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 h1,
@@ -507,6 +510,12 @@ img {
   width: max-content;
 }
 
+@media (max-width: 768px) {
+  .ticker-track {
+    gap: 1rem;
+  }
+}
+
 .ticker-track:hover {
   animation-play-state: paused;
 }
@@ -525,6 +534,12 @@ img {
 .ticker-slide {
   flex-shrink: 0;
   width: 280px;
+}
+
+@media (max-width: 768px) {
+  .ticker-slide {
+    width: 160px;
+  }
 }
 
 .retro-card {
@@ -1155,5 +1170,20 @@ img {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   MOBILE ADJUSTMENTS
+   ========================================== */
+@media (max-width: 768px) {
+  .nominee-work {
+    text-align: right;
+  }
+
+  .copyright {
+    text-align: center;
+    width: 100%;
+    display: block;
   }
 }
