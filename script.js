@@ -260,19 +260,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Initialize particles on hero
-  new GoldenParticles('particles-hero', {
-    count: 60,
-    maxSize: 3,
-    speed: 0.4
-  });
+  // Defer heavy non-critical visuals (Particles)
+  setTimeout(() => {
+    // Initialize particles on hero
+    new GoldenParticles('particles-hero', {
+      count: 60,
+      maxSize: 3,
+      speed: 0.4
+    });
 
-  // Initialize particles on nominees section
-  new GoldenParticles('particles-nominees', {
-    count: 40,
-    maxSize: 2.5,
-    speed: 0.3,
-    colors: ['#f4d03f', '#d4a017', '#cfb26f']
-  });
+    // Initialize particles on nominees section
+    new GoldenParticles('particles-nominees', {
+      count: 40,
+      maxSize: 2.5,
+      speed: 0.3,
+      colors: ['#f4d03f', '#d4a017', '#cfb26f']
+    });
+  }, 2000); // Wait for LCP & TBT to settle
 
 });
