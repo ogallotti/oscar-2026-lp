@@ -252,12 +252,12 @@ class Oscar3D {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Defer 3D loading to avoid blocking LCP/TBT
-    // Load only after critical initial paint is done (approx 2.5s delay)
+// Defer 3D until EVERYTHING is loaded (Fonts, Images, CSS)
+window.addEventListener('load', () => {
+    // Extra safety buffer for mobile TBT
     setTimeout(() => {
         requestAnimationFrame(() => {
             new Oscar3D();
         });
-    }, 2500);
+    }, 2000);
 });

@@ -6,13 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isPageVisible = !document.hidden;
   });
 
-  // Initialize AOS (Animate On Scroll)
-  AOS.init({
-    duration: 800,
-    once: true,
-    offset: 50,
-    easing: 'ease-out-cubic'
-  });
+
 
   // Sistema de Abas para Indicados
   const tabButtons = document.querySelectorAll('.tab-btn');
@@ -276,6 +270,17 @@ document.addEventListener('DOMContentLoaded', () => {
       speed: 0.3,
       colors: ['#f4d03f', '#d4a017', '#cfb26f']
     });
-  }, 2000); // Wait for LCP & TBT to settle
+
+    // Initialize AOS Late (prevents TBT/CLS on load)
+    if (typeof AOS !== 'undefined') {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 50,
+        easing: 'ease-out-cubic',
+        disable: 'mobile' // Optional: lighter on mobile
+      });
+    }
+  }, 3000); // 3s delay for absolute TBT safety
 
 });
