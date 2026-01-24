@@ -42,6 +42,8 @@ html {
   /* scroll-behavior: smooth;  REMOVED to prevent parallax lag */
   font-size: 16px;
   overflow-x: hidden;
+  overflow-y: scroll;
+  /* Force scrollbar to prevent shift */
 }
 
 body {
@@ -207,6 +209,8 @@ img {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  contain: layout paint;
+  /* Optimization: Isolate hero rendering */
 }
 
 @media (max-width: 768px) {
