@@ -254,14 +254,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Defer heavy non-critical visuals (Particles)
-  // Defer heavy non-critical visuals (Particles)
-  setTimeout(() => {
-    // DISABLE ON MOBILE to guarantee performance score
-    if (window.innerWidth <= 768) {
-      console.log('Mobile detected: Disabling Particles & AOS for performance');
-      return;
-    }
+  // Defer heavy non-critical visuals (Particles & AOS)
+  let heavyScriptsInitialized = false;
+
+  function initHeavyScripts() {
+    if (heavyScriptsInitialized) return;
+    heavyScriptsInitialized = true;
+
+    console.log('Heavy Scripts: Initializing...');
 
     // Initialize particles on hero
     new GoldenParticles('particles-hero', {
@@ -285,9 +285,27 @@ document.addEventListener('DOMContentLoaded', () => {
         once: true,
         offset: 50,
         easing: 'ease-out-cubic',
-        disable: 'mobile'
+        disable: false // Re-enabled on mobile
       });
     }
-  }, 3000); // 3s delay for absolute TBT safety
+  }
+
+  function scriptsInteractionTrigger() {
+    window.removeEventListener('scroll', scriptsInteractionTrigger);
+    window.removeEventListener('touchstart', scriptsInteractionTrigger);
+    window.removeEventListener('mousedown', scriptsInteractionTrigger);
+    initHeavyScripts();
+  }
+
+  // Global Activation Logic
+  if (window.innerWidth <= 768) {
+    // MOBILE: Wait for interaction
+    window.addEventListener('scroll', scriptsInteractionTrigger, { passive: true });
+    window.addEventListener('touchstart', scriptsInteractionTrigger, { passive: true });
+    window.addEventListener('mousedown', scriptsInteractionTrigger, { passive: true });
+  } else {
+    // DESKTOP: Auto-load after delay
+    setTimeout(initHeavyScripts, 3000);
+  }
 
 });
