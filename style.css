@@ -44,6 +44,7 @@ html {
   overflow-x: hidden;
   overflow-y: scroll;
   /* Force scrollbar to prevent shift */
+  min-height: 100vh;
 }
 
 body {
