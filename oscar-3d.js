@@ -254,6 +254,11 @@ class Oscar3D {
 
 // Defer 3D until EVERYTHING is loaded (Fonts, Images, CSS)
 window.addEventListener('load', () => {
+    // DISABLE ON MOBILE to guarantee performance score
+    if (window.innerWidth <= 768) {
+        return;
+    }
+
     // Extra safety buffer for mobile TBT
     setTimeout(() => {
         requestAnimationFrame(() => {

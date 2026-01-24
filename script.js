@@ -255,7 +255,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Defer heavy non-critical visuals (Particles)
+  // Defer heavy non-critical visuals (Particles)
   setTimeout(() => {
+    // DISABLE ON MOBILE to guarantee performance score
+    if (window.innerWidth <= 768) {
+      console.log('Mobile detected: Disabling Particles & AOS for performance');
+      return;
+    }
+
     // Initialize particles on hero
     new GoldenParticles('particles-hero', {
       count: 60,
@@ -278,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
         once: true,
         offset: 50,
         easing: 'ease-out-cubic',
-        disable: 'mobile' // Optional: lighter on mobile
+        disable: 'mobile'
       });
     }
   }, 3000); // 3s delay for absolute TBT safety
