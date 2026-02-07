@@ -9,6 +9,14 @@
   <link rel="icon" type="image/png" href="/images/logo-icon.png">
 
   <link rel="preload" href="/.netlify/images?url=/images/logo-icon.png&w=80&q=80" as="image" fetchpriority="high">
+  <link rel="preload" as="image" fetchpriority="high" href="/.netlify/images?url=/images/statue.png&w=600&q=80"
+    imagesrcset="/.netlify/images?url=/images/statue.png&w=400&q=80 400w,
+                 /.netlify/images?url=/images/statue.png&w=500&q=80 500w,
+                 /.netlify/images?url=/images/statue.png&w=600&q=80 600w,
+                 /.netlify/images?url=/images/statue.png&w=700&q=80 700w,
+                 /.netlify/images?url=/images/statue.png&w=800&q=80 800w,
+                 /.netlify/images?url=/images/statue.png&w=1200&q=80 1200w"
+    imagesizes="(max-aspect-ratio: 3/4) 100vw, 80vh">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,44 +25,66 @@
   <link rel="dns-prefetch" href="//connect.facebook.net">
   <link
     href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet">
+  </noscript>
 
-  <!-- AOS -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- AOS (Async) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  </noscript>
 
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-  <!-- Critical CSS -->
+
   <style>
+    /* ==========================================
+       VARIABLES & SETUP (V2)
+       ========================================== */
+
     :root {
+      /* Colors - Light Theme Focus */
       --color-gold: #a98f37;
       --color-gold-dark: #8c7325;
       --color-gold-light: #cfb26f;
+
       --color-dark: #171010;
       --color-dark-soft: #1f1818;
+
       --color-light: #ffffff;
       --color-off-white: #fcfbf9;
+      /* Warm light background */
       --color-cream: #f2efe9;
+
       --color-text-main: #171010;
       --color-text-muted: #595555;
       --color-text-light: #ffffff;
+
+      /* Fonts */
       --font-display: 'Cormorant Garamond', serif;
       --font-serif-alt: 'Instrument Serif', serif;
-      --font-sans: 'Inter', sans-serif
+      --font-sans: 'Inter', sans-serif;
     }
+
+    /* ==========================================
+       RESET & BASE
+       ========================================== */
 
     *,
     *::before,
     *::after {
       box-sizing: border-box;
       margin: 0;
-      padding: 0
+      padding: 0;
     }
 
     html {
+      /* scroll-behavior: smooth;  REMOVED to prevent parallax lag */
       font-size: 16px;
-      overflow-x: hidden
+      overflow-x: hidden;
     }
 
     body {
@@ -62,9 +92,11 @@
       line-height: 1.6;
       font-family: var(--font-sans);
       background-color: var(--color-off-white);
+      /* Light bg */
       color: var(--color-text-main);
+      -webkit-font-smoothing: antialiased;
       width: 100%;
-      overflow-x: hidden
+      overflow-x: hidden;
     }
 
     h1,
@@ -73,123 +105,38 @@
       font-family: var(--font-display);
       font-weight: 700;
       line-height: 1.1;
-      color: var(--color-dark)
+      color: var(--color-dark);
     }
 
     a {
       text-decoration: none;
       color: inherit;
-      transition: all 0.3s ease
+      transition: all 0.3s ease;
     }
 
     img {
       width: 100%;
-      display: block
+      display: block;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
-      position: relative
+      position: relative;
     }
 
-    .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 700px;
-      background-color: var(--color-dark);
-      color: var(--color-text-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .text-center {
       text-align: center;
-      overflow: hidden
     }
 
-    @media (max-width:768px) {
-      .hero {
-        height: 100svh;
-        min-height: 100svh
-      }
+    .text-gold-light {
+      color: var(--color-gold-light) !important;
     }
 
-    .hero-bg {
-      position: absolute;
-      inset: -20%;
-      width: 140%;
-      height: 140%;
-      background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(60, 35, 25, 0.5) 0%, transparent 50%), radial-gradient(ellipse 100% 80% at 70% 80%, rgba(45, 25, 18, 0.4) 0%, transparent 60%), radial-gradient(ellipse 120% 100% at 50% 50%, #2a1a14 0%, #1a1010 40%, #0f0808 100%);
-      z-index: 0
-    }
-
-    .hero-text-overlay {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(15, 8, 8, 0.7) 0%, rgba(15, 8, 8, 0.4) 50%, transparent 100%);
-      z-index: 1;
-      pointer-events: none
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center
-    }
-
-    .hero-date {
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--color-gold);
-      margin-bottom: 2.5rem
-    }
-
-    .hero-logo {
-      width: 60px;
-      height: auto;
-      margin-bottom: 2rem;
-      filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4))
-    }
-
-    .hero-title-wrapper {
-      margin-bottom: 2.5rem
-    }
-
-    .hero-headline {
-      color: var(--color-light);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 0.95
-    }
-
-    .line-1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: -0.02em
-    }
-
-    .line-2 {
-      font-family: var(--font-serif-alt);
-      font-style: italic;
-      font-size: clamp(4rem, 12vw, 9rem);
-      font-weight: 400;
-      color: var(--color-gold-light)
-    }
-
-    .hero-subheadline {
-      font-weight: 300;
-      max-width: 500px;
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 3rem
-    }
+    /* ==========================================
+       COMPONENTS
+       ========================================== */
 
     .btn {
       display: inline-flex;
@@ -201,20 +148,64 @@
       text-transform: uppercase;
       font-weight: 500;
       cursor: pointer;
-      border: 1px solid transparent
+      border: 1px solid transparent;
     }
 
     .btn-gold-outline {
       color: var(--color-gold-light);
       border-color: var(--color-gold);
-      background: transparent
+      background: transparent;
     }
 
-    .btn.glow-gold {
-      box-shadow: 0 0 15px rgba(169, 143, 55, 0.4), 0 0 30px rgba(169, 143, 55, 0.2)
+    .btn-gold-outline:hover {
+      background: var(--color-gold);
+      color: var(--color-dark);
     }
 
-    /* Hero Background Elements */
+    .link-arrow {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: var(--color-gold-dark);
+      letter-spacing: 0.05em;
+      margin-top: 1rem;
+    }
+
+    .link-arrow::after {
+      content: '→';
+      margin-left: 0.5rem;
+      transition: transform 0.3s;
+    }
+
+    .link-arrow:hover::after {
+      transform: translateX(5px);
+    }
+
+    /* ==========================================
+       GLOW EFFECTS (Somente em caixas com fundo)
+       ========================================== */
+
+    .btn.glow-gold,
+    .tab-btn.active {
+      box-shadow: 0 0 15px rgba(169, 143, 55, 0.4),
+        0 0 30px rgba(169, 143, 55, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .btn.glow-gold:hover,
+    .tab-btn.active:hover {
+      box-shadow: 0 0 20px rgba(169, 143, 55, 0.6),
+        0 0 40px rgba(169, 143, 55, 0.4),
+        0 0 60px rgba(169, 143, 55, 0.2);
+    }
+
+    /* ==========================================
+       PARTICLES CANVAS
+       ========================================== */
+
     .particles-canvas {
       position: absolute;
       top: 0;
@@ -222,30 +213,1022 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1
+      z-index: 1;
     }
+
+    /* ==========================================
+       OSCAR STATUE (3D Canvas - Full Hero Background)
+       ========================================== */
 
     .oscar-statue {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 10;
-      pointer-events: none
+      z-index: 0;
+      pointer-events: none;
     }
 
     #oscar-3d-canvas {
       width: 100%;
       height: 100%;
-      display: block
+      display: block;
+    }
+
+    /* ==========================================
+       HERO SECTION (Dark)
+       ========================================== */
+
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      background-color: var(--color-dark);
+      color: var(--color-text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        height: 100svh;
+        /* Use Small Viewport Height to fit initial screen with address bar */
+        min-height: 100svh;
+      }
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
+      background:
+        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(60, 35, 25, 0.5) 0%, transparent 50%),
+        radial-gradient(ellipse 100% 80% at 70% 80%, rgba(45, 25, 18, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 120% 100% at 50% 50%, #2a1a14 0%, #1a1010 40%, #0f0808 100%);
+      z-index: 0;
+      will-change: transform;
+    }
+
+    /* Dark overlay that fades with scroll */
+    .hero-text-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(15, 8, 8, 0.7) 0%, rgba(15, 8, 8, 0.4) 50%, transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+      will-change: opacity;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      /* Grain texture simulation */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-date {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--color-gold);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-logo {
+      width: 60px;
+      height: auto;
+      height: auto;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
+    }
+
+    .hero-title-wrapper {
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-headline {
+      color: var(--color-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 0.95;
+    }
+
+    .line-1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .line-2 {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 400;
+      color: var(--color-gold-light);
+    }
+
+    .hero-subheadline {
+      font-weight: 300;
+      max-width: 500px;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 3rem;
+    }
+
+    /* .hero .btn animation removed */
+
+    /* Scroll Indication */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 2;
+      transform: rotate(-90deg);
+      transform-origin: left bottom;
+    }
+
+    .scroll-text {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .line {
+      width: 40px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ==========================================
+       SECTIONS GENERAL
+       ========================================== */
+
+    .section {
+      padding: 8rem 0;
+      position: relative;
+      contain: layout style;
+    }
+
+    .section-label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-gold-dark);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    /* ==========================================
+       INTRO SECTION (Light)
+       Light background inherited from body
+       ========================================== */
+
+    /* Content Visibility Optimization */
+    .intro-section,
+    .retrospective-section,
+    .nominees-section,
+    .governors-section,
+    .rules-section,
+    .footer {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 500px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .intro-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+      }
+    }
+
+    .italic-highlight {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--color-gold-dark);
+    }
+
+    .intro-body p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    .intro-body strong {
+      color: var(--color-text-main);
+      font-weight: 600;
+    }
+
+    /* Visual Frame */
+    .visual-frame {
+      position: relative;
+      padding: 1.5rem;
+      border: 1px solid rgba(169, 143, 55, 0.2);
+    }
+
+    .visual-frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(169, 143, 55, 0.1);
+      transform: translate(10px, 10px);
+      z-index: -1;
+    }
+
+    .placeholder-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #e6e2dd;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+      animation: simmer 3s infinite;
+    }
+
+    @keyframes simmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* ==========================================
+       RETROSPECTIVE SECTION (Ticker Infinito)
+       ========================================== */
+    .retrospective-section {
+      background-color: var(--color-cream);
+      overflow: hidden;
+    }
+
+    /* Ticker Container */
+    .ticker-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 3rem 0;
+    }
+
+    /* Ticker Full Width - toca os dois lados da tela */
+    .ticker-fullwidth {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+    }
+
+    /* Fade nas bordas */
+    .ticker-fade {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .ticker-fade-left {
+      left: 0;
+      background: linear-gradient(to right, var(--color-cream) 0%, transparent 100%);
+    }
+
+    .ticker-fade-right {
+      right: 0;
+      background: linear-gradient(to left, var(--color-cream) 0%, transparent 100%);
+    }
+
+    /* Track do Ticker */
+    .ticker-track {
+      display: flex;
+      gap: 2rem;
+      animation: ticker-scroll 45s linear infinite;
+      width: max-content;
+    }
+
+    @media (max-width: 768px) {
+      .ticker-track {
+        gap: 1rem;
+      }
+    }
+
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker-scroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Slides do Ticker */
+    .ticker-slide {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    @media (max-width: 768px) {
+      .ticker-slide {
+        width: 160px;
+      }
+    }
+
+    .retro-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #d4cfc8;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .retro-card:hover {
+      transform: scale(1.03);
+    }
+
+    .retro-image-placeholder {
+      width: 100%;
+      height: 100%;
+      background-color: #ccc;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .retro-1 {
+      background-color: #a39585;
+    }
+
+    .retro-2 {
+      background-color: #8589a3;
+    }
+
+    .retro-3 {
+      background-color: #a38585;
+    }
+
+    .retro-4 {
+      background-color: #85a396;
+    }
+
+    .retro-5 {
+      background-color: #a39f85;
+    }
+
+    .retro-6 {
+      background-color: #9da385;
+    }
+
+    .retro-7 {
+      background-color: #a3858c;
+    }
+
+    .retro-6 {
+      background-color: #9da385;
+    }
+
+    .retro-7 {
+      background-color: #a3858c;
+    }
+
+    .retro-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .retro-card:hover .retro-overlay {
+      opacity: 1;
+    }
+
+    .retro-caption {
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================
+       NOMINEES SECTION (Dark)
+       ========================================== */
+    .nominees-section {
+      background-color: var(--color-dark);
+      color: var(--color-light);
+      /* Subtle noise texture again if desired */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    }
+
+    .mb-large {
+      margin-bottom: 6rem;
+    }
+
+    /* Grid Posters (Best Picture) */
+    .grid-posters {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 3rem 2rem;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .grid-posters {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem 1rem;
+      }
+    }
+
+    .nominee-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nominee-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .nominee-poster {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background-color: #333;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .nominee-card:hover .nominee-poster {
+      box-shadow: 0 10px 30px rgba(169, 143, 55, 0.3);
+      border-color: var(--color-gold);
+    }
+
+    .nominee-title {
+      font-size: 1.25rem;
+      color: var(--color-light);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .nominee-meta {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.25rem;
+      font-family: var(--font-sans);
+    }
+
+    /* Lists (Directing, Acting) */
+    .row {
+      display: flex;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .col-half {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .category-title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 2.5rem;
+      color: var(--color-gold);
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(169, 143, 55, 0.3);
+      padding-bottom: 0.5rem;
+    }
+
+    .nominee-list {
+      list-style: none;
+    }
+
+    .nominee-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .nominee-item:hover {
+      padding-left: 1rem;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.05), transparent);
+    }
+
+    .nominee-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--color-light);
+    }
+
+    .nominee-work {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--color-gold-light);
+    }
+
+    /* ==========================================
+       SISTEMA DE ABAS
+       ========================================== */
+
+    .tabs-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 3rem 0 2rem;
+      padding: 0 1rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid rgba(169, 143, 55, 0.4);
+      color: var(--color-gold-light);
+      padding: 0.8rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      background: rgba(169, 143, 55, 0.15);
+      border-color: var(--color-gold);
+    }
+
+    .tab-btn.active {
+      background: var(--color-gold);
+      border-color: var(--color-gold);
+      color: var(--color-dark);
+    }
+
+    .tabs-content {
+      margin-top: 2rem;
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Category Blocks */
+    .category-block {
+      margin-bottom: 4rem;
+    }
+
+    .category-block:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Categories Grid */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 4rem;
+    }
+
+    .categories-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 900px) {
+
+      .categories-grid,
+      .categories-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    /* Compact List for Technical Categories */
+    .nominee-list.compact .nominee-item {
+      padding: 0.6rem 0;
+    }
+
+    .nominee-list.compact .nominee-name {
+      font-size: 1.1rem;
+    }
+
+    .nominee-list.compact .nominee-work {
+      font-size: 0.9rem;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--color-text-muted);
+      margin-top: -1rem;
+      margin-bottom: 4rem;
+    }
+
+    /* ==========================================
+       GOVERNORS AWARDS
+       ========================================== */
+    .governors-section {
+      background-color: var(--color-off-white);
+      /* Light background contrast */
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+
+    .text-dark {
+      color: var(--color-dark);
+    }
+
+    .governors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    .governor-card {
+      text-align: center;
+    }
+
+    .governor-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: #dcdcdc;
+      margin: 0 auto 1.5rem;
+      filter: grayscale(100%);
+      transition: filter 0.4s ease;
+    }
+
+    .governor-card:hover .governor-image {
+      filter: grayscale(0%);
+      box-shadow: 0 0 0 5px rgba(169, 143, 55, 0.2);
+    }
+
+    /* Placeholders for colors */
+    .gov-1 {
+      background-color: #bbb;
+    }
+
+    .gov-2 {
+      background-color: #999;
+    }
+
+    .gov-3 {
+      background-color: #777;
+    }
+
+    .gov-4 {
+      background-color: #555;
+    }
+
+    .governor-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-dark);
+    }
+
+    .governor-desc {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--color-gold-dark);
+    }
+
+    /* ==========================================
+       GOVERNORS AWARDS - DUAS COLUNAS
+       ========================================== */
+    .governors-two-columns {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4rem;
+      margin-top: 10rem;
+    }
+
+    @media (max-width: 900px) {
+      .governors-two-columns {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    .governors-column-title {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--color-gold-dark);
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(169, 143, 55, 0.3);
+    }
+
+    .governor-card-large {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(169, 143, 55, 0.05) 0%, transparent 100%);
+      border: 1px solid rgba(169, 143, 55, 0.15);
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .governor-card-large:hover {
+      background: linear-gradient(135deg, rgba(169, 143, 55, 0.12) 0%, rgba(169, 143, 55, 0.03) 100%);
+      border-color: rgba(169, 143, 55, 0.4);
+      transform: translateX(5px);
+    }
+
+    .governor-card-large.featured {
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .governor-card-large.featured .governor-image-rect {
+      width: 100%;
+      max-width: 320px;
+      height: 280px;
+    }
+
+    .governor-image-rect {
+      width: 180px;
+      height: 120px;
+      flex-shrink: 0;
+      background-color: #dcdcdc;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(80%);
+      transition: filter 0.4s ease, transform 0.3s ease;
+    }
+
+    .governor-card-large:hover .governor-image-rect {
+      filter: grayscale(0%);
+      transform: scale(1.02);
+    }
+
+    .governor-info {
+      flex: 1;
+    }
+
+    /* Mantendo estilos antigos para compatibilidade */
+    .governors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    .governor-card {
+      text-align: center;
+    }
+
+    .governor-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: #dcdcdc;
+      margin: 0 auto 1.5rem;
+      filter: grayscale(100%);
+      transition: filter 0.4s ease;
+    }
+
+    .governor-card:hover .governor-image {
+      filter: grayscale(0%);
+      box-shadow: 0 0 0 5px rgba(169, 143, 55, 0.2);
+    }
+
+    /* ==========================================
+       GOVERNORS AWARDS - LAYOUT REDESIGN
+       ========================================== */
+    .governors-group {
+      margin-bottom: 2rem;
+    }
+
+    .governors-column-title.text-center {
+      text-align: center;
+      border-bottom: none;
+      margin-bottom: 3rem;
+      font-size: 2rem;
+    }
+
+    .governors-centered {
+      display: flex;
+      justify-content: center;
+    }
+
+    .governors-centered .governor-card-large {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .governor-card-large:hover {
+      background: linear-gradient(135deg, rgba(169, 143, 55, 0.12) 0%, rgba(169, 143, 55, 0.03) 100%);
+      border-color: rgba(169, 143, 55, 0.4);
+      transform: translateY(-5px);
+    }
+
+    .rules-section {
+      background-color: var(--color-dark-soft);
+      color: var(--color-light);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .rules-container {
+      display: flex;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .rules-header {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .rules-header p {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--color-gold);
+      margin-top: -1.5rem;
+    }
+
+    .rules-list {
+      flex: 2;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .rule-item {
+      border-left: 2px solid var(--color-gold);
+      padding-left: 1.5rem;
+    }
+
+    .rule-item h3 {
+      font-family: var(--font-sans);
+      text-transform: uppercase;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      color: var(--color-light);
+    }
+
+    .rule-item p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1rem;
+    }
+
+    /* Titulo com Contraste */
+    .rules-title {
+      color: var(--color-gold-light) !important;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .rules-subtitle {
+      font-family: var(--font-serif-alt);
+      font-style: italic;
+      font-size: 1.5rem;
+      color: var(--color-gold);
+      margin-top: -1.5rem;
+    }
+
+    /* ==========================================
+       FOOTER
+       ========================================== */
+    .footer {
+      background-color: #000;
+      color: #666;
+      padding: 4rem 0;
+      font-size: 0.85rem;
+      border-top: 1px solid #222;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .oscars-logo-text {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 0.2em;
+      color: #fff;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+
+    /* ==========================================
+       ANIMATIONS
+       ========================================== */
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUpFade {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================
+       MOBILE ADJUSTMENTS
+       ========================================== */
+    @media (max-width: 768px) {
+      .nominee-work {
+        text-align: right;
+      }
+
+      .copyright {
+        text-align: center;
+        width: 100%;
+        display: block;
+      }
     }
   </style>
-
-  <!-- Styles Async -->
-  <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="style.css">
-  </noscript>
 </head>
 
 <body>
@@ -261,7 +1244,14 @@
 
     <!-- Estatueta Oscar 3D -->
     <div class="oscar-statue" id="oscar-statue">
-      <canvas id="oscar-3d-canvas"></canvas>
+      <img src="/.netlify/images?url=/images/statue.png&w=412&q=80" srcset="/.netlify/images?url=/images/statue.png&w=300&q=80 300w,
+                /.netlify/images?url=/images/statue.png&w=412&q=80 412w,
+                /.netlify/images?url=/images/statue.png&w=600&q=80 600w" sizes="(max-width: 768px) 100vw, 412px"
+        alt="Oscar Statue" class="oscar-static-img" width="600" height="800" fetchpriority="high" loading="eager"
+        style="width: 100%; height: 100%; object-fit: contain; opacity: 1;">
+
+
+      <canvas id="oscar-3d-canvas" style="opacity: 0; transition: opacity 1s ease;"></canvas>
     </div>
 
     <div class="container hero-content">
@@ -311,8 +1301,12 @@
         <div class="intro-visual" data-aos="fade-left" data-aos-delay="300">
           <!-- Stylized Frame -->
           <div class="visual-frame">
-            <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" width="600" height="auto" loading="lazy"
+            <img src="/.netlify/images?url=/images/conan_host.png&w=600&q=80" srcset="/.netlify/images?url=/images/conan_host.png&w=300&q=80 300w,
+                      /.netlify/images?url=/images/conan_host.png&w=450&q=80 450w,
+                      /.netlify/images?url=/images/conan_host.png&w=600&q=80 600w"
+              sizes="(max-width: 768px) 100vw, 600px" width="600" height="800" loading="lazy" style="height: auto;"
               alt="Conan O'Brien apresentando o Oscar" class="intro-image">
+
           </div>
         </div>
       </div>
@@ -1057,7 +2051,7 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
 
   <!-- Three.js -->
   <script type="importmap">
@@ -1068,9 +2062,21 @@
     }
   }
   </script>
-  <script type="module" src="oscar-3d.js"></script>
+  <script>
+    // Defer 3D model loading to avoid blocking LCP
+    window.addEventListener('load', () => {
+      // Only load 3D on desktop/laptop (save battery/data on mobile)
+      if (window.innerWidth > 768) {
+        setTimeout(() => {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = 'oscar-3d.js';
+          document.body.appendChild(script);
+        }, 2500); // 2.5s delay after load
+      }
+    });
+  </script>
   <script src="script.js" defer></script>
-
 </body>
 
 </html>
