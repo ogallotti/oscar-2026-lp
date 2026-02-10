@@ -256,4 +256,34 @@ document.addEventListener('DOMContentLoaded', () => {
     colors: ['#f4d03f', '#d4a017', '#cfb26f']
   });
 
+  // Scroll Depth Tracking (Meta Pixel)
+  (function trackScrollDepth() {
+    var thresholds = [25, 50, 75, 90];
+    var tracked = {};
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var pct = parseInt(entry.target.dataset.scrollDepth);
+          if (!tracked[pct]) {
+            tracked[pct] = true;
+            if (typeof fbq === 'function') {
+              fbq('trackCustom', 'ScrollDepth', { percentage: pct });
+            }
+          }
+        }
+      });
+    });
+
+    document.body.style.position = 'relative';
+    thresholds.forEach(function (pct) {
+      var marker = document.createElement('div');
+      marker.dataset.scrollDepth = pct;
+      marker.style.cssText = 'position:absolute;height:1px;width:1px;opacity:0;pointer-events:none;';
+      marker.style.top = pct + '%';
+      document.body.appendChild(marker);
+      observer.observe(marker);
+    });
+  })();
+
 });
