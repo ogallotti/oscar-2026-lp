@@ -9,6 +9,29 @@ GitHub + Netlify com CI/CD automático. Cada push para main = deploy automático
 
 ---
 
+## REGRA DE OURO: Autonomia Total
+
+**VOCÊ DEVE fazer tudo sozinho. NUNCA peça para o usuário executar comandos manualmente.**
+
+### Comandos Interativos
+
+Quando um comando for interativo (como `netlify init`), VOCÊ deve:
+1. Executar o comando
+2. Enviar os inputs necessários para responder aos prompts (1, Enter, nome-do-site, etc.)
+3. Continuar até concluir
+
+**NUNCA:**
+- Peça para o usuário "rodar X no terminal"
+- Diga que "requer autenticação interativa"
+- Desista porque o comando é interativo
+
+**SEMPRE:**
+- Execute você mesmo
+- Envie os inputs corretos para cada prompt
+- Só informe o usuário quando ele precisar autorizar algo no navegador (OAuth)
+
+---
+
 ## IMPORTANTE: Integração GitHub + Netlify
 
 O deploy DEVE ser feito com integração Git automática. NUNCA use:
@@ -34,12 +57,10 @@ netlify status
 
 ### Interpretação dos Resultados
 
-| Git Remote | Netlify Status | Cenário |
-|------------|----------------|---------|
-| Vazio | Não logado/não linkado | **A** - Configuração inicial completa |
-| URL GitHub | Não linkado ao site | **B** - Apenas conectar Netlify |
-| URL GitHub | Site linkado sem CI/CD | **C** - Configurar integração Git |
-| URL GitHub | Site linkado com CI/CD | **D** - Apenas fazer push |
+- Git vazio + Netlify não linkado → **Cenário A** (Configuração inicial completa)
+- Git com URL GitHub + Netlify não linkado → **Cenário B** (Apenas conectar Netlify)
+- Git com URL GitHub + Site linkado sem CI/CD → **Cenário C** (Configurar integração Git)
+- Git com URL GitHub + Site linkado com CI/CD → **Cenário D** (Apenas fazer push)
 
 ---
 

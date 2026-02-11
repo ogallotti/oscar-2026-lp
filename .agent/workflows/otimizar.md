@@ -2,382 +2,393 @@
 description: otimizar
 ---
 
-# Instruções
+# Workflow: Otimizar Performance
 
-Você vai otimizar a performance da landing page para melhorar o score no PageSpeed Insights. Meta: **Score 90+ em Performance**.
-
-## Antes de Começar
-
-Leia o `index.html` e `style.css` atuais para analisar o que precisa ser otimizado.
+Meta: **Score 90+ no PageSpeed** (Desktop E Mobile) e **60 FPS constantes**.
 
 ---
 
-## 1. LCP / Imagens (Maior Impacto)
+# FASE 0: MEDIR ANTES (OBRIGATORIO)
 
-### Preload de Recursos Críticos
+**NUNCA pule esta fase.** Sem a nota inicial, nao da para saber se as mudancas ajudaram ou prejudicaram.
 
-```html
-<head>
-  <!-- Logo com alta prioridade -->
-  <link rel="preload" href="/images/logo.svg" as="image" fetchpriority="high">
+## Medicao automatica com Lighthouse
 
-  <!-- Foto hero com srcset responsivo -->
-  <link rel="preload" as="image"
-    href="/.netlify/images?url=/images/hero.jpg&w=1200&q=80"
-    imagesrcset="
-      /.netlify/images?url=/images/hero.jpg&w=640&q=80 640w,
-      /.netlify/images?url=/images/hero.jpg&w=1200&q=80 1200w,
-      /.netlify/images?url=/images/hero.jpg&w=1920&q=80 1920w"
-    imagesizes="(max-width: 768px) 100vw, 50vw">
-</head>
+Garanta que o servidor local esta rodando (skill `local-server`). Depois meça com `npx lighthouse` (funciona sem instalacao):
+
+```bash
+# Desktop
+npx lighthouse http://localhost:8888/CAMINHO --chrome-flags="--headless=new" --preset=desktop --output=json --output-path=./lighthouse-desktop-antes.json --quiet
+
+# Mobile (padrao do Lighthouse)
+npx lighthouse http://localhost:8888/CAMINHO --chrome-flags="--headless=new" --output=json --output-path=./lighthouse-mobile-antes.json --quiet
 ```
 
-### Checklist de Imagens
+Extraia e apresente os scores:
 
-- [ ] TODAS usando Netlify CDN: `/.netlify/images?url=/images/foto.jpg&w=800&q=80`
-- [ ] Qualidade `q=80` (bom equilíbrio entre qualidade e tamanho)
-- [ ] Todas com `width` e `height` explícitos
-- [ ] Imagens críticas com `aspect-ratio` no CSS
-- [ ] Hero: `loading="eager"` e `fetchpriority="high"`
-- [ ] Demais: `loading="lazy"`
-- [ ] Alt descritivo ou vazio (`alt=""` para decorativas)
+```bash
+node -e "
+const d=require('./lighthouse-desktop-antes.json');
+const m=require('./lighthouse-mobile-antes.json');
+const fmt=(r,label)=>{const c=r.categories.performance.score*100;const a=r.audits;return label+': '+c.toFixed(0)+' | LCP: '+a['largest-contentful-paint'].displayValue+' | TBT: '+a['total-blocking-time'].displayValue+' | CLS: '+a['cumulative-layout-shift'].displayValue+' | FCP: '+a['first-contentful-paint'].displayValue};
+console.log(fmt(d,'DESKTOP'));
+console.log(fmt(m,'MOBILE'));
+"
+```
 
-### Exemplo de Imagem Hero Otimizada
+Apresente os resultados ao usuario antes de prosseguir.
+
+Se o site ja esta publicado, substitua `http://localhost:8888/CAMINHO` pela URL de producao.
+
+---
+
+# FASE 1: AUDITORIA (OBRIGATORIA)
+
+**NUNCA corrija antes de completar a auditoria.**
+
+## Passo 1: Ler Todos os Arquivos
+
+Leia COMPLETAMENTE: `index.html`, `style.css`, `script.js` e qualquer CSS/JS linkado.
+
+## Passo 2: Identificar TODOS os Problemas
+
+### 2.1 Imagens
+Para CADA `<img>`: Netlify CDN? width/height numericos? loading correto (eager hero, lazy resto)?
+
+### 2.2 Hero/LCP (CRITICO)
+opacity:0 inicial? data-aos no hero? Animacao de entrada? transform inicial? Botoes com transform/opacity? Hero tem min-height fixo?
+
+### 2.3 AOS
+`disableMutationObserver: true`? `once: true`? Inicializa no DOMContentLoaded?
+
+### 2.4 Fontes
+Quantos weights? (max 3) `display=swap` na URL? `preconnect` para ambos dominios?
+
+### 2.5 Resource Hints
+Falta preconnect fonts? dns-prefetch analytics? preload hero image?
+
+### 2.6 Scripts
+Para CADA `<script>`: tem defer? Pode ser removido?
+Para CADA modulo pesado: Usa import estatico? (DEVE ser Dynamic Import) Esta linkado no HTML? (NAO deveria)
+
+### 2.7 Third-Party
+Analytics/pixels carregam imediatamente? Deveriam usar requestIdleCallback.
+
+### 2.8 JS Runtime (se houver animacoes JS)
+Multiplos RAF loops? Scroll sem throttle? Nao pausa off-screen/tab inativa?
+
+### 2.9 Videos/Iframes
+Videos sem poster/preload="none"? Iframes sem loading="lazy"?
+
+## Passo 3: Classificar e Apresentar
+
+Classifique cada problema:
+- **SEGURO** = correcao que SEMPRE melhora (imagens, hero, AOS config, resource hints)
+- **CONDICIONAL** = correcao que PODE melhorar se feita corretamente (Dynamic Import, content-visibility)
+
+**IMPORTANTE: Verificar se alguma "otimizacao" perigosa JA foi aplicada:**
+- CSS com `media="print" onload` SEM `<style>` inline critico? -> REVERTER para sincrono OU adicionar critical CSS inline
+- Google Fonts com `media="print" onload`? -> REVERTER para sincrono com preconnect
+- AOS inicializado via Interaction Trigger? -> REVERTER para init normal no DOMContentLoaded
+- `contain: layout paint` em secoes com overflow? -> REMOVER
+
+Apresente o relatorio completo.
+
+**Aguarde aprovacao antes de corrigir.**
+
+---
+
+# FASE 2: CORRECOES SEGURAS
+
+Estas mudancas SEMPRE melhoram a nota. Aplicar TODAS.
+
+## Regras
+1. Corrigir TODAS as imagens, nao algumas
+2. Remover biblioteca = CSS + JS + codigo + classes HTML
+3. width/height = NUMEROS (nunca "auto", "100%")
+4. **NUNCA desabilitar recursos - otimizar para que funcionem**
+
+---
+
+### 1. Imagens
 
 ```html
-<img
-  src="/.netlify/images?url=/images/hero.jpg&w=1200&q=80"
-  srcset="
-    /.netlify/images?url=/images/hero.jpg&w=640&q=80 640w,
-    /.netlify/images?url=/images/hero.jpg&w=1200&q=80 1200w,
-    /.netlify/images?url=/images/hero.jpg&w=1920&q=80 1920w"
-  sizes="(max-width: 768px) 100vw, 50vw"
-  width="1200"
-  height="800"
-  alt="Descrição"
-  loading="eager"
-  fetchpriority="high"
-  style="aspect-ratio: 3/2;"
->
+<img src="/.netlify/images?url=/images/foto.jpg&w=600&q=80" width="600" height="400" loading="lazy" alt="Descricao">
+<!-- Hero: loading="eager" fetchpriority="high" -->
+```
+
+### 2. Hero (LCP)
+
+Remover do hero: opacity:0, data-aos, animacoes de entrada, transform inicial.
+Adicionar: min-height fixo no container.
+**Texto e CTAs visiveis no primeiro frame.**
+
+### 3. AOS
+
+```javascript
+AOS.init({
+  duration: 800,
+  once: true,
+  offset: 50,
+  easing: 'ease-out-cubic',
+  disableMutationObserver: true
+});
+```
+
+Inicializar no DOMContentLoaded. NUNCA adiar com Interaction Trigger.
+
+### 4. Resource Hints
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="//www.google-analytics.com">
+<link rel="dns-prefetch" href="//connect.facebook.net">
+<link rel="preload" href="/.netlify/images?url=/images/hero.jpg&w=1200&q=80" as="image">
+```
+
+### 5. Fontes
+
+Manter sincronas com `preconnect` + `display=swap`. Reduzir para max 2-3 weights.
+
+```html
+<!-- CORRETO - manter assim -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Font:wght@400;700&display=swap" rel="stylesheet">
+```
+
+### 6. Scripts
+
+```html
+<script src="/script.js" defer></script>
+```
+
+Modulos pesados NAO no HTML - so Dynamic Import.
+
+### 7. Videos/Iframes
+
+```html
+<video poster="poster.jpg" preload="none">...</video>
+<iframe src="..." loading="lazy"></iframe>
+```
+
+### 8. Acessibilidade
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 ```
 
 ---
 
-## 2. CSS Crítico
+# FASE 3: CORRECOES CONDICIONAIS
 
-### Inline no Head (Completo)
+Estas mudancas PODEM ajudar, mas exigem cuidado. Aplicar uma de cada vez e verificar resultado.
 
-O CSS crítico deve incluir **TUDO** que aparece acima da dobra:
-- Reset básico
-- Container
-- Hero completo
-- Logo (incluindo `filter: drop-shadow` se houver)
-- Floating icons (se visíveis no hero)
-- Botão CTA
-- Cores e tipografia do hero
+### 9. Dynamic Import + IntersectionObserver (modulos pesados)
+
+```javascript
+function lazyLoadModule(selectorSecao, loadFn) {
+  const section = document.querySelector(selectorSecao);
+  if (!section) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      observer.disconnect();
+      loadFn();
+    }
+  }, { rootMargin: '200px' });
+
+  observer.observe(section);
+}
+
+// Three.js
+lazyLoadModule('#secao-3d', async () => {
+  const THREE = await import('three');
+  const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+  const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+  initScene(THREE, GLTFLoader, DRACOLoader);
+});
+
+// Particulas
+lazyLoadModule('#secao-particulas', async () => {
+  const { initParticles } = await import('./particles.js');
+  const isMobile = window.innerWidth < 768;
+  initParticles({ count: isMobile ? 25 : 40 });
+});
+```
+
+**NUNCA usar Interaction Trigger com fallback de 8s.** O PageSpeed nao interage e o fallback carrega recursos durante a janela de medicao.
+
+### 10. Third-Party (Analytics, Pixels)
+
+```javascript
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => { loadAnalytics(); loadPixels(); });
+} else {
+  setTimeout(() => { loadAnalytics(); loadPixels(); }, 3000);
+}
+```
+
+### 11. Critical CSS Inline + CSS Async
+
+Extrair CSS above-the-fold, inline no `<head>`, e carregar `style.css` async:
 
 ```html
 <head>
+  <!-- CSS critico inline (above-the-fold) -->
   <style>
-    /* Reset mínimo */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* Container */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-    /* Hero */
-    .hero { min-height: 100vh; display: flex; align-items: center; }
-    .hero-content { /* estilos */ }
-    .hero-title { /* estilos */ }
-    .hero-subtitle { /* estilos */ }
-
-    /* Logo - incluir drop-shadow se existir */
-    .logo { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-
-    /* CTA Button */
-    .cta-button { /* estilos completos */ }
-
-    /* Floating Icons (se visíveis no hero) */
-    .floating-icons { /* estilos */ }
+    /* :root variaveis, reset, nav, hero, primeira secao, botoes */
+    /* TUDO que aparece no primeiro viewport sem scroll */
   </style>
 
-  <!-- CSS restante com carregamento async -->
-  <link rel="preload" href="/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <!-- CSS completo async + fallback -->
+  <link rel="stylesheet" href="/style.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="/style.css"></noscript>
 </head>
 ```
 
-### Carregamento Async do CSS
+**Como extrair o CSS critico:**
+1. Identificar quais elementos sao visiveis no primeiro viewport (hero, nav, botoes, tipografia)
+2. Copiar TODAS as regras CSS que afetam esses elementos (incluindo `:root`, reset, fontes)
+3. Incluir media queries relevantes para esses elementos
+4. Testar: abrir a pagina e verificar se o above-fold renderiza identico com e sem o style.css
 
-Técnica com `media="print"`:
+**Verificacao OBRIGATORIA apos aplicar:**
+- [ ] CLS permanece < 0.1 (se subiu, o inline esta incompleto)
+- [ ] Above-fold renderiza identico com CSS inline sozinho
+- [ ] `<noscript>` fallback presente
+- [ ] NUNCA fazer CSS async SEM o inline critico
 
-```html
-<link rel="stylesheet" href="/style.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="/style.css"></noscript>
-```
-
-### Minificação
-
-- Remover comentários
-- Remover espaços em branco desnecessários
-- Pode usar ferramentas online como cssnano ou clean-css
-- Meta: reduzir ~30% do tamanho
-
----
-
-## 3. Animações do Hero
-
-### REMOVER Animações de Entrada no Hero
-
-O hero deve renderizar **instantaneamente**. Remova:
-
-- [ ] `fadeInUp` da logo
-- [ ] `fadeInUp` do h1
-- [ ] `fadeInUp` do p / subtitle
-- [ ] `fadeInUp` do cta-button
-- [ ] `fadeInUp` das hero-tags
-- [ ] `fadeInRight` do hero-image-container
-- [ ] Qualquer `opacity: 0` inicial no hero
-- [ ] Qualquer `transform: translateY()` inicial
-- [ ] Atributos `data-aos` no hero
-
-**Animações PÓS-LOAD são permitidas** (hover, scroll-triggered em outras seções).
-
----
-
-## 4. Facebook Pixel (se houver)
-
-### Carregamento Otimizado
-
-```html
-<script>
-// Facebook Pixel com carregamento inteligente
-(function() {
-  var pixelLoaded = false;
-
-  function loadPixel() {
-    if (pixelLoaded) return;
-    pixelLoaded = true;
-
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;t.defer=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'SEU_PIXEL_ID');
-    fbq('track', 'PageView');
-  }
-
-  // Carregar apenas na interação ou após 4s
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(function() {
-      setTimeout(loadPixel, 4000);
-    });
-  } else {
-    setTimeout(loadPixel, 4000);
-  }
-
-  // Ou na primeira interação
-  ['scroll', 'click', 'touchstart'].forEach(function(event) {
-    window.addEventListener(event, loadPixel, { once: true, passive: true });
-  });
-})();
-</script>
-```
-
-### DNS Prefetch (não preconnect)
-
-```html
-<head>
-  <!-- DNS prefetch ao invés de preconnect para Facebook -->
-  <link rel="dns-prefetch" href="//connect.facebook.net">
-  <link rel="dns-prefetch" href="//www.facebook.com">
-</head>
-```
-
----
-
-## 5. Preconnects e DNS Prefetch
-
-### Ordem de Prioridade
-
-```html
-<head>
-  <!-- Críticos: preconnect (com crossorigin quando necessário) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com">
-
-  <!-- Não-críticos: dns-prefetch -->
-  <link rel="dns-prefetch" href="//connect.facebook.net">
-  <link rel="dns-prefetch" href="//www.facebook.com">
-  <link rel="dns-prefetch" href="//www.googletagmanager.com">
-</head>
-```
-
----
-
-## 6. Fontes
-
-### Preload da Fonte Principal
-
-```html
-<head>
-  <!-- Preload da fonte mais usada (geralmente bold/700) -->
-  <link rel="preload"
-    href="https://fonts.gstatic.com/s/montserrat/v26/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCuM70w-Y3tcoqK5.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin>
-
-  <!-- Google Fonts com display=swap -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-```
-
-### Como Encontrar a URL da Fonte
-
-1. Abra o DevTools > Network
-2. Filtre por "Font"
-3. Carregue a página
-4. Copie a URL da fonte .woff2 mais usada
-
----
-
-## 7. Main Thread / Otimizações de Layout
-
-### Content-Visibility para Seções Below-Fold
+### 12. content-visibility (CUIDADO)
 
 ```css
-/* Seções que não aparecem no carregamento inicial */
-.benefits,
-.testimonials,
-.pricing,
-.faq,
-.contact,
-footer {
+/* SOMENTE em secoes bem abaixo do fold */
+.secao-longe-do-fold {
   content-visibility: auto;
-  contain-intrinsic-size: 0 500px; /* altura estimada */
+  contain-intrinsic-size: 0 600px; /* DEVE ser proximo da altura REAL */
 }
 ```
 
-### CSS Containment
+- NUNCA nas primeiras secoes
+- DEVE saber a altura real da secao
+- Se nao sabe a altura, NAO USE
 
-```css
-/* Isolar seções para melhor performance de layout */
-section {
-  contain: layout style;
-}
+### 12. JS Runtime (se houver animacoes)
 
-/* Para elementos com tamanho fixo */
-.card {
-  contain: layout style paint;
-}
+```javascript
+// Throttle scroll
+let scheduled = false;
+addEventListener('scroll', () => {
+  if (!scheduled) {
+    requestAnimationFrame(() => { update(); scheduled = false; });
+    scheduled = true;
+  }
+}, { passive: true });
 ```
 
+- Unico RAF loop
+- IntersectionObserver para pausar off-screen
+- visibilitychange para pausar tab inativa
+
 ---
 
-## 8. JavaScript
+# NUNCA FAZER (causa queda de nota)
 
-### Scripts no Final do Body
+Estas "otimizacoes" parecem boas praticas mas PIORAM a nota:
 
-```html
-  <!-- Antes de </body> -->
+1. **CSS async SEM critical CSS inline** (`media="print" onload` sem `<style>` inline)
+   -> Pagina renderiza sem estilo, re-renderiza com estilo = CLS 0.3-0.7
+   -> COM critical inline e valido (ver item 11 da FASE 3)
 
-  <!-- Scripts críticos (se houver) -->
-  <script src="/script.js" defer></script>
+2. **Google Fonts async** (`media="print" onload`)
+   -> Atrasa download, anula preconnect. display=swap ja resolve.
 
-  <!-- Scripts não-críticos -->
-  <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
+3. **AOS via Interaction Trigger**
+   -> CSS aplica opacity:0 imediatamente, JS so roda apos interacao = conteudo invisivel
 
-  <!-- AOS (se usado em seções below-fold) -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      AOS.init({ once: true, duration: 600 });
-    });
-  </script>
-</body>
+4. **`contain: layout paint` em todas as secoes**
+   -> Clipa overflow, quebra layouts criativos
+
+5. **Interaction Trigger com fallback < 20s**
+   -> Recursos carregam durante janela do PageSpeed = TBT
+
+**Se alguma dessas ja foi aplicada, REVERTER como parte da otimizacao.**
+
+---
+
+# FASE 4: VALIDACAO
+
+## Passo 1: Verificar cada correcao
+
+Confirmar que cada problema da auditoria foi corrigido.
+Relatorio: CORRIGIDO / NAO CORRIGIDO / NAO APLICAVEL
+
+## Passo 2: Verificar no DevTools
+
+**Network Tab:** Modulos pesados NAO aparecem no carregamento inicial, SO apos scroll ate a secao.
+**Console:** Zero erros.
+
+## Passo 3: Medir DEPOIS
+
+Rodar Lighthouse novamente (mesma URL, mesmo servidor):
+
+```bash
+# Desktop
+npx lighthouse http://localhost:8888/CAMINHO --chrome-flags="--headless=new" --preset=desktop --output=json --output-path=./lighthouse-desktop-depois.json --quiet
+
+# Mobile
+npx lighthouse http://localhost:8888/CAMINHO --chrome-flags="--headless=new" --output=json --output-path=./lighthouse-mobile-depois.json --quiet
 ```
 
----
+Comparar ANTES vs DEPOIS:
 
-## Checklist Final de Otimização
+```bash
+node -e "
+const da=require('./lighthouse-desktop-antes.json');
+const dd=require('./lighthouse-desktop-depois.json');
+const ma=require('./lighthouse-mobile-antes.json');
+const md=require('./lighthouse-mobile-depois.json');
+const g=(r,k)=>r.audits[k].displayValue;
+const s=(r)=>(r.categories.performance.score*100).toFixed(0);
+console.log('            | ANTES | DEPOIS | DIFF');
+console.log('Desktop     |  '+s(da)+'   |  '+s(dd)+'    | '+(s(dd)-s(da)>0?'+':'')+(s(dd)-s(da)));
+console.log('Mobile      |  '+s(ma)+'   |  '+s(md)+'    | '+(s(md)-s(ma)>0?'+':'')+(s(md)-s(ma)));
+console.log('LCP Desktop | '+g(da,'largest-contentful-paint')+' | '+g(dd,'largest-contentful-paint'));
+console.log('LCP Mobile  | '+g(ma,'largest-contentful-paint')+' | '+g(md,'largest-contentful-paint'));
+console.log('CLS Desktop | '+g(da,'cumulative-layout-shift')+' | '+g(dd,'cumulative-layout-shift'));
+console.log('CLS Mobile  | '+g(ma,'cumulative-layout-shift')+' | '+g(md,'cumulative-layout-shift'));
+console.log('TBT Desktop | '+g(da,'total-blocking-time')+' | '+g(dd,'total-blocking-time'));
+console.log('TBT Mobile  | '+g(ma,'total-blocking-time')+' | '+g(md,'total-blocking-time'));
+"
+```
 
-### LCP (Largest Contentful Paint)
-- [ ] Preload da logo
-- [ ] Preload da imagem hero com srcset
-- [ ] Imagens com q=80
-- [ ] width/height em todas imagens
-- [ ] aspect-ratio em imagens críticas
-- [ ] fetchpriority="high" no hero
+**Se a nota CAIU:** Identificar qual mudanca causou a queda e reverter. As correcoes SEGURAS nunca causam queda - o problema esta nas CONDICIONAIS ou em algo que entrou na lista NUNCA FAZER.
 
-### CSS
-- [ ] Critical CSS inline completo
-- [ ] drop-shadow da logo no critical CSS
-- [ ] CSS restante com carregamento async
-- [ ] CSS minificado
+## Passo 4: Limpar arquivos temporarios
 
-### Animações
-- [ ] Sem fadeInUp na logo
-- [ ] Sem fadeInUp no h1, p, cta-button, hero-tags
-- [ ] Sem fadeInRight no hero-image-container
-- [ ] Sem opacity:0 ou transform inicial no hero
+```bash
+rm -f lighthouse-desktop-antes.json lighthouse-desktop-depois.json lighthouse-mobile-antes.json lighthouse-mobile-depois.json
+```
 
-### Tracking (Facebook, etc)
-- [ ] Defer com requestIdleCallback
-- [ ] Carregamento na interação
-- [ ] Fallback de 4s
-- [ ] dns-prefetch ao invés de preconnect
-
-### Preconnects
-- [ ] preconnect para fonts.googleapis.com
-- [ ] preconnect para fonts.gstatic.com
-- [ ] preconnect para unpkg.com
-- [ ] dns-prefetch para serviços de tracking
-
-### Fontes
-- [ ] Preload da fonte principal (700)
-- [ ] display=swap
-
-### Main Thread
-- [ ] content-visibility: auto em seções below-fold
-- [ ] contain: layout style em sections
-- [ ] contain-intrinsic-size definido
+**PARAR E AGUARDAR. Apresentar tabela comparativa ao usuario.**
 
 ---
 
-## Sua Tarefa
+# REGRAS
 
-1. Analise o código atual
-2. Identifique problemas de performance usando o checklist acima
-3. Aplique as correções necessárias na ordem de impacto:
-   - Primeiro: Imagens e LCP
-   - Segundo: CSS crítico
-   - Terceiro: Animações do hero
-   - Quarto: Scripts e tracking
-   - Quinto: Content-visibility
-4. Liste o que foi otimizado
-
----
-
-## Ao Finalizar
-
-Após aplicar as otimizações:
-
-1. Liste o que foi otimizado (com detalhes)
-2. Forneça o link (use a skill `local-server` para obter a URL correta)
-3. Sugira testar no PageSpeed Insights: https://pagespeed.web.dev/
-4. Sugira próximo passo: "Quando estiver satisfeito, use `/publicar` para deploy."
-5. **PARE COMPLETAMENTE E AGUARDE**
-
-## IMPORTANTE: Regras de Comportamento
-
-- NUNCA faça deploy automaticamente
-- NUNCA rode `/publicar` ou `/previsualizar` automaticamente
-- Quando o usuário aprovar, apenas confirme e aguarde comando explícito
+- **NUNCA** corrija sem auditoria completa
+- **NUNCA** corrija parcialmente (todas as imagens, nao algumas)
+- **NUNCA** use import estatico para bibliotecas pesadas
+- **NUNCA** linke modulos pesados no HTML
+- **NUNCA** torne CSS async SEM critical CSS inline
+- **NUNCA** torne fontes async
+- **NUNCA** adie AOS com Interaction Trigger
+- **NUNCA** desabilite recursos - otimize para que funcionem
+- **NUNCA** deploy sem comparar nota antes/depois
+- **NUNCA** prossiga automaticamente - aguarde comando explicito

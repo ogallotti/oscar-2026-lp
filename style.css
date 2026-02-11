@@ -42,6 +42,9 @@ html {
   /* scroll-behavior: smooth;  REMOVED to prevent parallax lag */
   font-size: 16px;
   overflow-x: hidden;
+  overflow-y: scroll;
+  /* Force scrollbar to prevent shift */
+  min-height: 100vh;
 }
 
 body {
@@ -207,6 +210,8 @@ img {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  contain: layout paint;
+  /* Optimization: Isolate hero rendering */
 }
 
 @media (max-width: 768px) {
@@ -263,14 +268,21 @@ img {
   letter-spacing: 0.2em;
   color: var(--color-gold);
   margin-bottom: 2.5rem;
+  color: var(--color-gold);
+  margin-bottom: 2.5rem;
+  /* Removed animation for LCP */
 }
 
 .hero-logo {
   width: 60px;
   height: auto;
+  margin-bottom: 2rem;
   height: auto;
   margin-bottom: 2rem;
-  filter: drop-shadow(0 0 20px rgba(212, 160, 23, 0.4));
+  /* Removed animation for LCP */
+  width: 60px;
+  height: 60px;
+  /* Explicit size to fix Logo CLS */
 }
 
 .hero-title-wrapper {
@@ -282,7 +294,10 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-items: center;
   line-height: 0.95;
+  min-height: 180px;
+  /* Reserve space to prevent CLS */
 }
 
 .line-1 {
@@ -291,6 +306,9 @@ img {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  /* Removed animation for LCP */
 }
 
 .line-2 {
@@ -299,6 +317,9 @@ img {
   font-size: clamp(4rem, 12vw, 9rem);
   font-weight: 400;
   color: var(--color-gold-light);
+  font-weight: 400;
+  color: var(--color-gold-light);
+  /* Removed animation for LCP */
 }
 
 .hero-subheadline {
@@ -307,9 +328,12 @@ img {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3rem;
+  /* Removed animation for LCP */
 }
 
-/* .hero .btn animation removed */
+/* Removed .hero .btn animation */
 
 /* Scroll Indication */
 .scroll-indicator {
@@ -344,7 +368,6 @@ img {
 .section {
   padding: 8rem 0;
   position: relative;
-  contain: layout style;
 }
 
 .section-label {
@@ -367,17 +390,6 @@ img {
    INTRO SECTION (Light)
    Light background inherited from body
    ========================================== */
-
-/* Content Visibility Optimization */
-.intro-section,
-.retrospective-section,
-.nominees-section,
-.governors-section,
-.rules-section,
-.footer {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
-}
 
 .intro-grid {
   display: grid;
@@ -505,6 +517,7 @@ img {
   display: flex;
   gap: 2rem;
   animation: ticker-scroll 45s linear infinite;
+  will-change: transform;
   width: max-content;
 }
 
@@ -1183,5 +1196,226 @@ img {
     text-align: center;
     width: 100%;
     display: block;
+  }
+}
+
+/* ==========================================
+   FOOTER CONTACT BUTTON
+   ========================================== */
+.footer-contact-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.footer-contact-btn:hover {
+  color: #fff;
+}
+
+/* ==========================================
+   CONTACT MODAL
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: linear-gradient(145deg, #1a1a1a 0%, #111 100%);
+  border: 1px solid rgba(169, 143, 55, 0.25);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2.5rem;
+  position: relative;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(169, 143, 55, 0.08);
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(169, 143, 55, 0.2);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--color-gold-light);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.modal-close:hover {
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* Form Fields */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: var(--color-gold);
+  background: rgba(169, 143, 55, 0.06);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* intl-tel-input overrides para harmonizar com o design */
+.iti {
+  width: 100%;
+}
+
+.iti__country-container {
+  z-index: 10;
+}
+
+.iti__selected-country {
+  background: transparent !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.iti__arrow {
+  border-top-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Form Feedback */
+.form-feedback {
+  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  min-height: 0;
+  transition: min-height 0.3s ease;
+}
+
+.form-feedback.success {
+  color: #4caf50;
+}
+
+.form-feedback.error {
+  color: #ef5350;
+}
+
+/* Submit Button */
+.modal-submit-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal Mobile */
+@media (max-width: 600px) {
+  .modal {
+    padding: 1.5rem;
+    max-height: 95vh;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==========================================
+   PERFORMANCE & ACCESSIBILITY
+   ========================================== */
+
+.retrospective-section,
+.nominees-section,
+.governors-section,
+.rules-section,
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

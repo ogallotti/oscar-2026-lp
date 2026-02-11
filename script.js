@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Initialize AOS (Animate On Scroll)
-  AOS.init({
-    duration: 800,
-    once: true,
-    offset: 50,
-    easing: 'ease-out-cubic'
+  // Visibility API to pause animations
+  let isPageVisible = true;
+  document.addEventListener('visibilitychange', () => {
+    isPageVisible = !document.hidden;
   });
+
+
 
   // Sistema de Abas para Indicados
   const tabButtons = document.querySelectorAll('.tab-btn');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lerp function for smooth interpolation
   const lerp = (start, end, factor) => start + (end - start) * factor;
-  const smoothFactor = 0.15; // Increased for snappier response on mobile
+  const smoothFactor = 0.08; // Lower = smoother but slower
 
   function updateParallax() { // Renamed from animateParallax to updateParallax to avoid conflict
     // Read directly from window for max performance
@@ -96,6 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
       targetValues.btnOpacity = Math.max(0, 1 - progress * 1.4);
 
       targetValues.scrollOpacity = Math.max(0, 1 - progress * 2);
+    }
+  }
+
+  function animateParallax() {
+    if (!isPageVisible) {
+      requestAnimationFrame(animateParallax);
+      return;
     }
 
     // Smooth interpolation towards target values
@@ -152,11 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollIndicator.style.opacity = smoothValues.scrollOpacity;
     }
 
-    requestAnimationFrame(updateParallax);
+    requestAnimationFrame(animateParallax);
   }
 
   // Start parallax animation loop
-  updateParallax();
+  window.addEventListener('scroll', updateParallax);
+  animateParallax();
 
   // ==========================================
   // GOLDEN PARTICLES SYSTEM
@@ -209,6 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     animate() {
+      if (!isPageVisible) {
+        requestAnimationFrame(() => this.animate());
+        return;
+      }
+
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.particles.forEach((p, index) => {
@@ -241,49 +254,237 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Initialize particles on hero
-  new GoldenParticles('particles-hero', {
-    count: 60,
-    maxSize: 3,
-    speed: 0.4
-  });
+  // Defer heavy non-critical visuals (Particles & AOS)
+  let heavyScriptsInitialized = false;
 
-  // Initialize particles on nominees section
-  new GoldenParticles('particles-nominees', {
-    count: 40,
-    maxSize: 2.5,
-    speed: 0.3,
-    colors: ['#f4d03f', '#d4a017', '#cfb26f']
-  });
+  function initHeavyScripts() {
+    if (heavyScriptsInitialized) return;
+    heavyScriptsInitialized = true;
 
-  // Scroll Depth Tracking (Meta Pixel)
-  (function trackScrollDepth() {
-    var thresholds = [25, 50, 75, 90];
-    var tracked = {};
+    console.log('Heavy Scripts: Initializing...');
 
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          var pct = parseInt(entry.target.dataset.scrollDepth);
-          if (!tracked[pct]) {
-            tracked[pct] = true;
-            if (typeof fbq === 'function') {
-              fbq('trackCustom', 'ScrollDepth', { percentage: pct });
+    // Initialize particles on hero
+    new GoldenParticles('particles-hero', {
+      count: 60,
+      maxSize: 3,
+      speed: 0.4
+    });
+
+    // Initialize particles on nominees section
+    new GoldenParticles('particles-nominees', {
+      count: 40,
+      maxSize: 2.5,
+      speed: 0.3,
+      colors: ['#f4d03f', '#d4a017', '#cfb26f']
+    });
+
+    // Initialize AOS Late (prevents TBT/CLS on load)
+    if (typeof AOS !== 'undefined') {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 50,
+        easing: 'ease-out-cubic',
+        disable: false // Re-enabled on mobile
+      });
+    }
+
+    // Scroll Depth Tracking (Meta Pixel)
+    (function trackScrollDepth() {
+      var thresholds = [25, 50, 75, 90];
+      var tracked = {};
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var pct = parseInt(entry.target.dataset.scrollDepth);
+            if (!tracked[pct]) {
+              tracked[pct] = true;
+              if (typeof fbq === 'function') {
+                fbq('trackCustom', 'ScrollDepth', { percentage: pct });
+              }
             }
           }
-        }
+        });
       });
-    });
 
-    document.body.style.position = 'relative';
-    thresholds.forEach(function (pct) {
-      var marker = document.createElement('div');
-      marker.dataset.scrollDepth = pct;
-      marker.style.cssText = 'position:absolute;height:1px;width:1px;opacity:0;pointer-events:none;';
-      marker.style.top = pct + '%';
-      document.body.appendChild(marker);
-      observer.observe(marker);
+      document.body.style.position = 'relative';
+      thresholds.forEach(function (pct) {
+        var marker = document.createElement('div');
+        marker.dataset.scrollDepth = pct;
+        marker.style.cssText = 'position:absolute;height:1px;width:1px;opacity:0;pointer-events:none;';
+        marker.style.top = pct + '%';
+        document.body.appendChild(marker);
+        observer.observe(marker);
+      });
+    })();
+  }
+
+  function scriptsInteractionTrigger() {
+    window.removeEventListener('scroll', scriptsInteractionTrigger);
+    window.removeEventListener('touchstart', scriptsInteractionTrigger);
+    window.removeEventListener('mousedown', scriptsInteractionTrigger);
+    initHeavyScripts();
+  }
+
+  // Global Activation Logic
+  if (window.innerWidth <= 768) {
+    // MOBILE: Wait for interaction
+    window.addEventListener('scroll', scriptsInteractionTrigger, { passive: true });
+    window.addEventListener('touchstart', scriptsInteractionTrigger, { passive: true });
+    window.addEventListener('mousedown', scriptsInteractionTrigger, { passive: true });
+  } else {
+    // DESKTOP: Auto-load after delay
+    setTimeout(initHeavyScripts, 3000);
+  }
+  // ==========================================
+  // CONTACT MODAL & FORM
+  // ==========================================
+  const contactOverlay = document.getElementById('contact-modal-overlay');
+  const openModalBtn = document.getElementById('open-contact-modal');
+  const closeModalBtn = document.getElementById('close-contact-modal');
+  const contactForm = document.querySelector('[data-form]');
+  const formFeedback = document.querySelector('.form-feedback');
+  const telefoneInput = document.getElementById('telefone-contato');
+
+  // intl-tel-input initialization
+  let itiInstance = null;
+  if (telefoneInput && typeof intlTelInput !== 'undefined') {
+    itiInstance = intlTelInput(telefoneInput, {
+      initialCountry: 'br',
+      preferredCountries: ['br', 'us', 'pt'],
+      separateDialCode: true,
+      strictMode: true,
+      loadUtilsOnInit: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/js/utils.js'
     });
-  })();
+  }
+
+  // Open modal
+  function openModal() {
+    if (contactOverlay) {
+      contactOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Close modal
+  function closeModal() {
+    if (contactOverlay) {
+      contactOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      if (formFeedback) {
+        formFeedback.textContent = '';
+        formFeedback.className = 'form-feedback';
+      }
+    }
+  }
+
+  if (openModalBtn) openModalBtn.addEventListener('click', openModal);
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+  // Close on overlay click
+  if (contactOverlay) {
+    contactOverlay.addEventListener('click', (e) => {
+      if (e.target === contactOverlay) closeModal();
+    });
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && contactOverlay && contactOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Email validation - block temp domains
+  const tempEmailDomains = [
+    'tempmail', 'guerrillamail', '10minutemail', 'mailinator',
+    'throwaway', 'fakeinbox', 'yopmail', 'trashmail', 'temp-mail',
+    'disposable', 'sharklasers'
+  ];
+
+  function isValidEmail(email) {
+    const domain = email.split('@')[1] || '';
+    return !tempEmailDomains.some(temp => domain.toLowerCase().includes(temp));
+  }
+
+  // Form submit
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const emailField = contactForm.querySelector('[name="email"]');
+      const nomeField = contactForm.querySelector('[name="nome"]');
+
+      // Validate email
+      if (emailField && !isValidEmail(emailField.value)) {
+        formFeedback.textContent = 'Por favor, use um e-mail valido (nao temporario).';
+        formFeedback.className = 'form-feedback error';
+        return;
+      }
+
+      // Validate phone
+      if (itiInstance && !itiInstance.isValidNumber()) {
+        formFeedback.textContent = 'Por favor, insira um numero de WhatsApp valido.';
+        formFeedback.className = 'form-feedback error';
+        return;
+      }
+
+      // Disable button
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+      }
+
+      // Capture values before reset
+      const nome = nomeField ? nomeField.value : '';
+      const email = emailField ? emailField.value : '';
+
+      // Build FormData
+      const formData = new FormData(contactForm);
+
+      // Replace telefone with international format
+      if (itiInstance) {
+        formData.set('telefone', itiInstance.getNumber());
+      }
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+
+        if (response.ok) {
+          // Track Lead
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+          }
+          if (typeof dataLayer !== 'undefined') {
+            dataLayer.push({ event: 'generate_lead' });
+          }
+
+          formFeedback.textContent = 'Mensagem enviada com sucesso!';
+          formFeedback.className = 'form-feedback success';
+          contactForm.reset();
+          if (itiInstance) itiInstance.setCountry('br');
+
+          // Auto-close modal after 3s
+          setTimeout(closeModal, 3000);
+        } else {
+          throw new Error('Erro no envio');
+        }
+      } catch (err) {
+        formFeedback.textContent = 'Erro ao enviar. Tente novamente.';
+        formFeedback.className = 'form-feedback error';
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar Mensagem';
+        }
+      }
+    });
+  }
 
 });

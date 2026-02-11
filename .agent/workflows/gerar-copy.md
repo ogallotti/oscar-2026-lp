@@ -22,8 +22,25 @@ Este workflow NÃO:
 
 ## Antes de Começar
 
-1. Leia o `index.html` atual para ver a estrutura e textos existentes
-2. Entenda o contexto do projeto (produto/serviço, público-alvo, objetivo)
+### Criar a Pasta da Pagina
+
+Pergunte ao usuario qual sera o nome desta pagina (ex: "pagina-vendas", "pagina-obrigado", "lp-lancamento").
+
+Crie uma pasta com este nome na raiz do projeto. Todos os arquivos desta pagina ficarao dentro desta pasta:
+
+```
+projeto/
+├── pagina-vendas/      ← pasta criada
+│   ├── copy.md         ← sera criado agora
+│   ├── index.html      ← sera criado em /gerar-design
+│   └── style.css       ← sera criado em /gerar-design
+└── .agent/
+```
+
+### Entender o Contexto
+
+1. Entenda o contexto do projeto (produto/serviço, público-alvo, objetivo)
+2. Se ja existir um `index.html` na pasta, leia para ver textos existentes
 
 ## Diretrizes de Copy
 
@@ -66,7 +83,7 @@ Então crie ou melhore a copy conforme solicitado.
 
 ## Saída
 
-Salve a copy estruturada em um arquivo `copy.md` na raiz do projeto.
+Salve a copy estruturada em um arquivo `copy.md` dentro da pasta da pagina criada.
 
 Formato do arquivo:
 
