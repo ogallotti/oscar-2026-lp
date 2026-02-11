@@ -13,7 +13,7 @@
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
       };
       if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
       n.queue = []; t = b.createElement(e); t.async = !0;
@@ -46,6 +46,9 @@
   <noscript>
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
   </noscript>
+
+  <!-- intl-tel-input -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/css/intlTelInput.css">
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
@@ -855,11 +858,48 @@
         <a href="#">Imprensa</a>
         <a href="#">Privacidade</a>
         <a href="#">Termos</a>
+        <button type="button" class="footer-contact-btn" id="open-contact-modal">Contato</button>
       </div>
       <p class="copyright">&copy; 2026 Academy of Motion Picture Arts and Sciences</p>
     </div>
   </footer>
 
+  <!-- MODAL CONTATO -->
+  <div class="modal-overlay" id="contact-modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Entre em Contato</h2>
+        <button type="button" class="modal-close" id="close-contact-modal" aria-label="Fechar">&times;</button>
+      </div>
+      <form name="contato" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form>
+        <input type="hidden" name="form-name" value="contato">
+        <p hidden><label>Nao preencha: <input name="bot-field"></label></p>
+
+        <div class="form-group">
+          <label class="form-label" for="nome-contato">Nome</label>
+          <input type="text" id="nome-contato" name="nome" class="form-input" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email-contato">E-mail</label>
+          <input type="email" id="email-contato" name="email" class="form-input" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="telefone-contato">WhatsApp</label>
+          <input type="tel" id="telefone-contato" name="telefone" class="form-input" required autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="mensagem-contato">Mensagem</label>
+          <textarea id="mensagem-contato" name="mensagem" class="form-input form-textarea" rows="4" required></textarea>
+        </div>
+
+        <div class="form-feedback"></div>
+        <button type="submit" class="btn btn-gold-outline glow-gold modal-submit-btn">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <!-- Scripts -->
@@ -875,6 +915,7 @@
   }
   </script>
   <script type="module" src="oscar-3d.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/js/intlTelInput.min.js"></script>
   <script src="script.js" defer></script>
 
 </body>

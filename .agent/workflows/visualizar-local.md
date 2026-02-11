@@ -2,35 +2,29 @@
 description: visualizar-local
 ---
 
-# Instruções
+# Instrucoes
 
-O usuário quer visualizar a página no navegador localmente.
+O usuario quer visualizar a pagina no navegador localmente. Use a skill `local-server` que contem toda a logica necessaria.
 
-## Sua Tarefa
+## Processo
 
-Use a skill `local-server` para iniciar o servidor de desenvolvimento e obter a URL correta.
+1. **Leia a skill `local-server`** (`.agent/skills/local-server/SKILL.md`) e siga as instrucoes detalhadas
+2. A skill cobre: verificacao de servidor existente, portas disponiveis, e troubleshooting
 
-A skill cuida de:
-- Verificar se já existe um servidor rodando
-- Encontrar uma porta disponível se necessário
-- Iniciar o Netlify Dev
-- Fornecer o link correto
+## REGRA ABSOLUTA: Apenas Netlify Dev
 
-## Importante
+**NUNCA** use alternativas como `python -m http.server`, `npx serve`, etc.
 
-- O servidor precisa estar rodando para o CDN de imagens funcionar (`/.netlify/images`)
-- Se houver erro de porta em uso, a skill tentará outra porta
-- Verifique se está na pasta correta do projeto
+O Netlify Dev e **OBRIGATORIO** porque:
+1. CDN de imagens (`/.netlify/images`) so funciona com ele
+2. Redirects do netlify.toml sao simulados
+3. Formularios Netlify funcionam
+4. Mostra o site EXATAMENTE como vai ao ar
 
 ## Ao Finalizar
 
-Após fornecer o link:
-
-1. Aguarde o usuário visualizar
+Informe a URL ao usuario e:
+1. Aguarde o usuario visualizar
 2. **PARE COMPLETAMENTE E AGUARDE**
 
-## IMPORTANTE: Regras de Comportamento
-
-- NUNCA continue para outras etapas automaticamente
-- NUNCA comece a fazer alterações sem solicitação
-- Apenas forneça o link e aguarde instrução do usuário
+**NUNCA** continue para outras etapas automaticamente.

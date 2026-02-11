@@ -337,5 +337,154 @@ document.addEventListener('DOMContentLoaded', () => {
     // DESKTOP: Auto-load after delay
     setTimeout(initHeavyScripts, 3000);
   }
+  // ==========================================
+  // CONTACT MODAL & FORM
+  // ==========================================
+  const contactOverlay = document.getElementById('contact-modal-overlay');
+  const openModalBtn = document.getElementById('open-contact-modal');
+  const closeModalBtn = document.getElementById('close-contact-modal');
+  const contactForm = document.querySelector('[data-form]');
+  const formFeedback = document.querySelector('.form-feedback');
+  const telefoneInput = document.getElementById('telefone-contato');
+
+  // intl-tel-input initialization
+  let itiInstance = null;
+  if (telefoneInput && typeof intlTelInput !== 'undefined') {
+    itiInstance = intlTelInput(telefoneInput, {
+      initialCountry: 'br',
+      preferredCountries: ['br', 'us', 'pt'],
+      separateDialCode: true,
+      strictMode: true,
+      loadUtilsOnInit: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/js/utils.js'
+    });
+  }
+
+  // Open modal
+  function openModal() {
+    if (contactOverlay) {
+      contactOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Close modal
+  function closeModal() {
+    if (contactOverlay) {
+      contactOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      if (formFeedback) {
+        formFeedback.textContent = '';
+        formFeedback.className = 'form-feedback';
+      }
+    }
+  }
+
+  if (openModalBtn) openModalBtn.addEventListener('click', openModal);
+  if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+  // Close on overlay click
+  if (contactOverlay) {
+    contactOverlay.addEventListener('click', (e) => {
+      if (e.target === contactOverlay) closeModal();
+    });
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && contactOverlay && contactOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Email validation - block temp domains
+  const tempEmailDomains = [
+    'tempmail', 'guerrillamail', '10minutemail', 'mailinator',
+    'throwaway', 'fakeinbox', 'yopmail', 'trashmail', 'temp-mail',
+    'disposable', 'sharklasers'
+  ];
+
+  function isValidEmail(email) {
+    const domain = email.split('@')[1] || '';
+    return !tempEmailDomains.some(temp => domain.toLowerCase().includes(temp));
+  }
+
+  // Form submit
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const emailField = contactForm.querySelector('[name="email"]');
+      const nomeField = contactForm.querySelector('[name="nome"]');
+
+      // Validate email
+      if (emailField && !isValidEmail(emailField.value)) {
+        formFeedback.textContent = 'Por favor, use um e-mail valido (nao temporario).';
+        formFeedback.className = 'form-feedback error';
+        return;
+      }
+
+      // Validate phone
+      if (itiInstance && !itiInstance.isValidNumber()) {
+        formFeedback.textContent = 'Por favor, insira um numero de WhatsApp valido.';
+        formFeedback.className = 'form-feedback error';
+        return;
+      }
+
+      // Disable button
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+      }
+
+      // Capture values before reset
+      const nome = nomeField ? nomeField.value : '';
+      const email = emailField ? emailField.value : '';
+
+      // Build FormData
+      const formData = new FormData(contactForm);
+
+      // Replace telefone with international format
+      if (itiInstance) {
+        formData.set('telefone', itiInstance.getNumber());
+      }
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+
+        if (response.ok) {
+          // Track Lead
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+          }
+          if (typeof dataLayer !== 'undefined') {
+            dataLayer.push({ event: 'generate_lead' });
+          }
+
+          formFeedback.textContent = 'Mensagem enviada com sucesso!';
+          formFeedback.className = 'form-feedback success';
+          contactForm.reset();
+          if (itiInstance) itiInstance.setCountry('br');
+
+          // Auto-close modal after 3s
+          setTimeout(closeModal, 3000);
+        } else {
+          throw new Error('Erro no envio');
+        }
+      } catch (err) {
+        formFeedback.textContent = 'Erro ao enviar. Tente novamente.';
+        formFeedback.className = 'form-feedback error';
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar Mensagem';
+        }
+      }
+    });
+  }
 
 });

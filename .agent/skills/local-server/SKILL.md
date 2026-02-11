@@ -9,150 +9,104 @@ Servidor de desenvolvimento local usando Netlify Dev.
 
 ---
 
-## Configuração de Porta
+## REGRA ABSOLUTA: Apenas Netlify Dev
 
-**IMPORTANTE:** A porta pode variar. Siga este processo:
+**NUNCA** use alternativas como `python -m http.server`, `npx serve`, etc.
 
-### 1. Verificar Porta no netlify.toml
-
-```bash
-cat netlify.toml | grep -i port
-```
-
-Se não encontrar, a porta padrão do Netlify Dev é `8888`.
-
-### 2. Verificar se a Porta Está em Uso
-
-```bash
-lsof -i :8888
-```
-
-Se retornar algo, a porta está em uso por outro processo.
-
-### 3. Iniciar o Servidor
-
-**Se a porta estiver livre:**
-
-```bash
-netlify dev
-```
-
-**Se a porta estiver em uso**, use uma porta alternativa:
-
-```bash
-netlify dev --port 8889
-```
-
-Portas alternativas sugeridas: `8889`, `8890`, `3000`, `3001`, `5000`
+O Netlify Dev é obrigatório porque:
+- CDN de imagens (`/.netlify/images`) só funciona com ele
+- Simula redirects do netlify.toml
+- Testa formulários Netlify
+- Mostra o site EXATAMENTE como vai ao ar
 
 ---
 
-## Processo Completo
+## Processo (SEMPRE seguir)
+
+### 1. Verificar se já existe servidor DESTA pasta
 
 ```bash
-# 1. Verificar porta configurada
-PORT=$(grep -oP 'port\s*=\s*\K\d+' netlify.toml 2>/dev/null || echo "8888")
+lsof -i :8888 -i :8889 -i :8890 -i :3999 -i :4000 -i :4001 2>/dev/null | grep node
+```
 
-# 2. Verificar se está em uso
-if lsof -i :$PORT > /dev/null 2>&1; then
-  echo "Porta $PORT em uso. Tentando alternativa..."
-  # Tentar portas alternativas
-  for ALT_PORT in 8889 8890 3000 3001 5000; do
-    if ! lsof -i :$ALT_PORT > /dev/null 2>&1; then
-      PORT=$ALT_PORT
-      break
-    fi
-  done
-fi
+Se houver processos, verifique o diretório de trabalho deles:
 
-# 3. Iniciar servidor
-netlify dev --port $PORT
+```bash
+# Substitua PID pelo número do processo encontrado
+lsof -p PID 2>/dev/null | grep cwd
+```
+
+**Se o diretório for a pasta atual:**
+- O servidor já está rodando
+- Apenas informe o link ao usuário (a porta está na saída do primeiro comando)
+- **NÃO inicie outro servidor**
+
+### 2. Se NÃO houver servidor desta pasta
+
+Verifique quais portas estão ocupadas e escolha o primeiro par livre:
+
+- 8888 / 3999
+- 8889 / 4000
+- 8890 / 4001
+- 8891 / 4002
+- 8892 / 4003
+
+### 3. Iniciar o servidor
+
+```bash
+netlify dev --port {PRINCIPAL} --functions-port {FUNCOES}
 ```
 
 ---
 
-## URL do Servidor
-
-Após iniciar, a URL será:
+## Resumo do Fluxo
 
 ```
-http://localhost:{PORTA}
+1. Verificar processos node nas portas 8888-8892 e 3999-4003
+   │
+   ├── Encontrou processo?
+   │   │
+   │   ├── É desta pasta? → Informar link existente, NÃO criar novo
+   │   │
+   │   └── É de outra pasta? → Escolher próximo par de portas livre
+   │
+   └── Nenhum processo? → Usar portas padrão 8888/3999
+
+2. Iniciar servidor (se necessário)
+
+3. Informar URL ao usuário
 ```
-
-Onde `{PORTA}` é a porta usada (verifique a saída do comando).
-
----
-
-## Por Que Usar Netlify Dev?
-
-1. **CDN de Imagens** - `/.netlify/images` só funciona com Netlify Dev
-2. **Formulários** - Testa integração com Netlify Forms
-3. **Redirects** - Simula os redirects do netlify.toml
-4. **Environment** - Carrega variáveis de ambiente do .env
 
 ---
 
 ## Troubleshooting
 
-### "Port already in use"
-
-A porta já está sendo usada. Use uma porta alternativa:
+### netlify: command not found
 
 ```bash
-netlify dev --port 8889
-```
-
-Ou mate o processo que está usando a porta:
-
-```bash
-# Encontrar o processo
-lsof -i :8888
-
-# Matar pelo PID
-kill -9 <PID>
-```
-
-### "Not a site directory"
-
-Você não está na pasta do projeto. Navegue até a pasta correta:
-
-```bash
-cd /caminho/do/projeto
-```
-
-### "netlify.toml not found"
-
-Crie um arquivo `netlify.toml` básico na raiz:
-
-```toml
-[build]
-  publish = "."
-
-[dev]
-  port = 8888
-
-[images]
-  remote_images = ["https://.*"]
+npm install -g netlify-cli
 ```
 
 ### Servidor não atualiza
 
-Pode ser cache do navegador. Faça hard refresh:
+Cache do navegador. Hard refresh:
 - Mac: `Cmd+Shift+R`
 - Windows: `Ctrl+Shift+R`
 
 ---
 
-## Dica: Servidor em Background
+## Ao Finalizar
 
-Se quiser manter o servidor rodando enquanto faz outras tarefas:
+Informe a URL ao usuário:
 
-```bash
-netlify dev &
-```
+> "Servidor iniciado. Acesse: http://localhost:{PORTA}"
 
-Para parar depois:
+Ou se já existia:
 
-```bash
-pkill -f "netlify dev"
-```
+> "Servidor já está rodando. Acesse: http://localhost:{PORTA}"
+
+Após fornecer o link:
+1. Aguarde o usuário visualizar
+2. **PARE COMPLETAMENTE E AGUARDE**
+
+**NUNCA** continue para outras etapas automaticamente.

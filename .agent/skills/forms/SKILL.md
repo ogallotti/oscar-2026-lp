@@ -1,11 +1,11 @@
 ---
 name: forms
-description: Use when creating or modifying contact forms, lead capture forms, or any form with a phone field. Includes intl-tel-input with masks, email validation, Netlify Forms integration with AJAX submit, and thank you page redirect.
+description: Use when creating or modifying contact forms, lead capture forms, or any form with a phone field. Includes intl-tel-input with masks, email validation, Netlify Forms integration with AJAX submit, redirect with URL params forwarding, and thank you page.
 ---
 
 # Skill: Forms
 
-Formulários com Netlify Forms, validação internacional de telefone e submit via AJAX.
+Formularios com Netlify Forms, validacao internacional de telefone, submit via AJAX e redirect com repasse de parametros.
 
 ---
 
@@ -19,13 +19,12 @@ Formulários com Netlify Forms, validação internacional de telefone e submit v
   data-netlify="true"
   netlify-honeypot="bot-field"
   data-form
-  class="form"
 >
-  <!-- OBRIGATÓRIO para AJAX: hidden input com form-name -->
+  <!-- OBRIGATORIO para AJAX: hidden input com form-name -->
   <input type="hidden" name="form-name" value="contato">
 
   <!-- Honeypot anti-spam -->
-  <p hidden><label>Não preencha: <input name="bot-field"></label></p>
+  <p hidden><label>Nao preencha: <input name="bot-field"></label></p>
 
   <div class="form-group">
     <label class="form-label" for="nome">Nome</label>
@@ -49,138 +48,74 @@ Formulários com Netlify Forms, validação internacional de telefone e submit v
 
 ---
 
-## Atributos Obrigatórios do Form
+## Atributos Obrigatorios do Form
 
-| Atributo | Valor | Descrição |
-|----------|-------|-----------|
-| `name` | Nome único | Identificador no dashboard Netlify |
-| `method` | `POST` | Método de envio |
-| `action` | `/pagina-obrigado.html` | Redirect após sucesso |
-| `data-netlify` | `true` | Ativa Netlify Forms |
-| `netlify-honeypot` | `bot-field` | Anti-spam |
-| `data-form` | (sem valor) | Seletor para JavaScript |
+- `name` = Nome unico → Identificador no dashboard Netlify
+- `method` = `POST` → Metodo de envio
+- `action` = `/pagina-obrigado.html` → Redirect apos sucesso (com repasse de parametros)
+- `data-netlify` = `true` → Ativa Netlify Forms
+- `netlify-honeypot` = `bot-field` → Anti-spam
+- `data-form` (sem valor) → Seletor para JavaScript
 
-### Hidden Input OBRIGATÓRIO
+### Hidden Input OBRIGATORIO
 
 ```html
 <input type="hidden" name="form-name" value="contato">
 ```
 
-**CRÍTICO:** O `value` DEVE ser EXATAMENTE igual ao atributo `name` do `<form>`. Sem isso, o submit via AJAX não funciona.
+**CRITICO:** O `value` DEVE ser EXATAMENTE igual ao atributo `name` do `<form>`. Sem isso, o submit via AJAX nao funciona.
 
 ---
 
 ## JavaScript para Submit via AJAX
 
-### Código Correto
+O script.js do template ja inclui tudo. Abaixo a referencia do que ele faz:
+
+### Validacao de Email
+
+Bloqueia dominios de email temporario:
 
 ```javascript
-function initForms() {
-  const forms = document.querySelectorAll('form[data-form]');
-  forms.forEach(form => {
-    form.addEventListener('submit', handleFormSubmit);
-  });
-}
-
-async function handleFormSubmit(e) {
-  e.preventDefault();
-
-  const form = e.target;
-  const submitBtn = form.querySelector('[type="submit"]');
-  const feedback = form.querySelector('.form-feedback');
-
-  // Validação
-  let isValid = true;
-  const requiredFields = form.querySelectorAll('[required]');
-
-  requiredFields.forEach(field => {
-    field.classList.remove('error');
-    if (!field.value.trim()) {
-      field.classList.add('error');
-      isValid = false;
-    }
-    if (field.type === 'email' && field.value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(field.value)) {
-        field.classList.add('error');
-        isValid = false;
-      }
-    }
-  });
-
-  if (!isValid) {
-    if (feedback) feedback.textContent = 'Preencha todos os campos corretamente.';
-    return;
-  }
-
-  // Loading state
-  const originalText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Enviando...';
-
-  try {
-    const formData = new FormData(form);
-
-    // ⚠️ CRÍTICO: URL do fetch
-    // NUNCA use '/' - causa problemas com redirects
-    // Use o action do form ou window.location.pathname
-    const response = await fetch(form.getAttribute('action') || window.location.pathname, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formData).toString()
-    });
-
-    if (response.ok) {
-      // Meta Pixel (se configurado)
-      if (typeof fbq === 'function') {
-        fbq('track', 'Lead');
-      }
-
-      // Redirect para página de obrigado
-      const action = form.getAttribute('action');
-      if (action) {
-        window.location.href = action;
-        return;
-      }
-
-      // Fallback: mostrar mensagem
-      if (feedback) {
-        feedback.textContent = 'Enviado com sucesso!';
-        feedback.classList.add('success');
-      }
-      form.reset();
-    } else {
-      throw new Error('Erro no envio');
-    }
-  } catch (error) {
-    console.error('Form error:', error);
-    if (feedback) {
-      feedback.textContent = 'Erro ao enviar. Tente novamente.';
-      feedback.classList.add('error');
-    }
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', initForms);
+const tempEmailDomains = [
+  'tempmail', 'guerrillamail', '10minutemail', 'mailinator',
+  'throwaway', 'fakeinbox', 'yopmail', 'trashmail', 'temp-mail',
+  'disposable', 'sharklasers'
+];
 ```
 
-### Pontos CRÍTICOS do JavaScript
+### Validacao de Telefone
 
-| Aspecto | Correto | ERRADO |
-|---------|---------|--------|
-| URL do fetch | `form.getAttribute('action')` | `'/'` (quebra com redirects) |
-| Content-Type | `application/x-www-form-urlencoded` | `application/json` |
-| Body | `new URLSearchParams(formData).toString()` | `JSON.stringify(data)` |
-| FormData | `new FormData(form)` | Montar objeto manualmente |
+Usa `window.itiInstance.isValidNumber()` para validar o numero no formato internacional.
+
+### Submit e Redirect
+
+Fluxo apos submit bem-sucedido:
+
+1. Dispara `fbq('track', 'Lead')` se Meta Pixel estiver configurado
+2. Se o form tem `action`, redireciona com TODOS os parametros:
+   - Repassa parametros da URL atual (utm_source, utm_medium, fbclid, gclid, etc)
+   - Adiciona `nome` e `email` do formulario como parametros
+3. Se o form NAO tem `action`, mostra mensagem de sucesso in-page
+
+**Exemplo de redirect:**
+
+URL de acesso: `https://site.com/?utm_source=google&fbclid=abc123`
+Form preenchido: nome="Joao", email="joao@email.com"
+Redirect final: `/obrigado.html?utm_source=google&fbclid=abc123&nome=Joao&email=joao%40email.com`
+
+### Pontos CRITICOS do JavaScript
+
+- URL do fetch → `form.getAttribute('action')` (NUNCA `'/'`)
+- Content-Type → `application/x-www-form-urlencoded` (NUNCA `application/json`)
+- Body → `new URLSearchParams(formData).toString()` (NUNCA `JSON.stringify`)
+- FormData → `new FormData(form)` (NUNCA montar objeto manualmente)
+- Capturar nome e email ANTES do fetch (form.reset limpa os campos)
 
 ---
 
-## Página de Agradecimento
+## Pagina de Agradecimento
 
-Crie uma página separada para o redirect após sucesso:
+Crie uma pagina separada para o redirect apos sucesso. Os parametros `nome` e `email` ficam disponiveis via URL para personalizacao.
 
 ```html
 <!DOCTYPE html>
@@ -193,13 +128,23 @@ Crie uma página separada para o redirect após sucesso:
 </head>
 <body>
   <section class="thank-you">
-    <h1>Inscrição Confirmada!</h1>
-    <p>Você será redirecionado em <span id="countdown">10</span> segundos...</p>
+    <h1>Inscricao Confirmada!</h1>
+    <p>Voce sera redirecionado em <span id="countdown">10</span> segundos...</p>
     <a href="https://link-do-grupo" class="btn" id="btn-action">Entrar no Grupo</a>
   </section>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Parametros disponiveis via URL (nome, email, utms, etc)
+      const params = new URLSearchParams(window.location.search);
+      const nome = params.get('nome');
+
+      // Personalizar saudacao (opcional)
+      if (nome) {
+        document.querySelector('h1').textContent = nome + ', Inscricao Confirmada!';
+      }
+
+      // Countdown e redirect
       let count = 10;
       const countdownEl = document.getElementById('countdown');
       const linkDestino = document.getElementById('btn-action').href;
@@ -222,65 +167,53 @@ Crie uma página separada para o redirect após sucesso:
 
 ## intl-tel-input (Telefone Internacional)
 
-Já configurado no template com:
-- Strict mode (máscara obrigatória)
-- Brasil como país padrão
-- Validação automática
+Ja configurado no template com:
+- Strict mode (mascara obrigatoria por pais)
+- Brasil como pais padrao
+- Bandeiras no dropdown
+- Validacao automatica
 - Formato internacional no envio
 
-CDNs necessárias:
+### CDNs necessarias
+
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/css/intlTelInput.css">
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.10/build/js/intlTelInput.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/css/intlTelInput.css">
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/js/intlTelInput.min.js"></script>
+```
+
+### Inicializacao (ja no script.js)
+
+```javascript
+window.itiInstance = intlTelInput(input, {
+  initialCountry: 'br',
+  preferredCountries: ['br', 'us', 'pt'],
+  separateDialCode: true,
+  strictMode: true,
+  loadUtilsOnInit: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24.6.0/build/js/utils.js'
+});
 ```
 
 ---
 
-## Meta Pixel (Facebook/Instagram)
+## Tracking (Meta Pixel / GTM)
 
-### Na página do form (PageView + Lead no submit)
+O `script.js` ja dispara automaticamente no submit bem-sucedido:
+- `fbq('track', 'Lead')` - Meta Pixel
+- `dataLayer.push({ event: 'generate_lead' })` - GTM
 
-```html
-<head>
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', 'SEU_PIXEL_ID');
-  fbq('track', 'PageView');
-  </script>
-</head>
-```
-
-O evento `Lead` é disparado no JavaScript do form (ver código acima).
-
-### Na página de obrigado (apenas PageView)
-
-```html
-<script>
-  // ... código do pixel ...
-  fbq('init', 'SEU_PIXEL_ID');
-  fbq('track', 'PageView');
-  // NÃO colocar Lead aqui - já foi disparado no submit
-</script>
-```
+Para configurar os snippets de tracking (GTM e/ou Meta Pixel), use `/configurar-tracking` ou consulte a skill `tracking`.
 
 ---
 
 ## Dashboard do Netlify
 
-Após deploy, os envios aparecem em: **Site > Forms > [nome do formulário]**
+Apos deploy, os envios aparecem em: **Site > Forms > [nome do formulario]**
 
-Configure notificações: **Site > Forms > Form notifications** (Email, Slack, Webhook)
+Configure notificacoes: **Site > Forms > Form notifications** (Email, Slack, Webhook)
 
 ---
 
-## Checklist de Verificação
+## Checklist de Verificacao
 
 ### HTML
 - [ ] `name="nome-unico"` no `<form>`
@@ -292,39 +225,48 @@ Configure notificações: **Site > Forms > Form notifications** (Email, Slack, W
 - [ ] Campo honeypot dentro de elemento `hidden`
 
 ### JavaScript
-- [ ] Fetch usa `form.getAttribute('action')` (NÃO usa `'/'`)
+- [ ] Fetch usa `form.getAttribute('action')` (NAO usa `'/'`)
 - [ ] Header `Content-Type: application/x-www-form-urlencoded`
 - [ ] Body usa `new URLSearchParams(formData).toString()`
 - [ ] FormData criado a partir do form
+- [ ] Nome e email capturados ANTES do fetch
+- [ ] Redirect repassa parametros da URL + nome + email
 
 ### Netlify
-- [ ] Form aparece listado após deploy
-- [ ] Submissões aparecem no painel
+- [ ] Form aparece listado apos deploy
+- [ ] Submissoes aparecem no painel
 
 ---
 
 ## Troubleshooting
 
-### Form não aparece no painel Netlify
+### Form nao aparece no painel Netlify
 
 1. Verificar `data-netlify="true"` no `<form>`
 2. Fazer novo deploy (Clear cache and deploy)
-3. Verificar se form detection está habilitado em Forms > Settings
+3. Verificar se form detection esta habilitado em Forms > Settings
 
-### Submissões não são registradas
+### Submissoes nao sao registradas
 
 1. Verificar se `form-name` hidden tem valor EXATO do `name` do form
-2. Verificar se fetch NÃO está enviando para `'/'` (usar `action`)
+2. Verificar se fetch NAO esta enviando para `'/'` (usar `action`)
 3. Verificar console do browser por erros
 4. Testar submit nativo (sem JS) para isolar problema
 
-### Redirect após submit não funciona
+### Redirect apos submit nao funciona
 
-1. Verificar se `action` do form está com caminho correto
-2. Verificar se JavaScript redireciona após `response.ok`
-3. Verificar se não há erro antes do redirect
+1. Verificar se `action` do form esta com caminho correto
+2. Verificar se JavaScript redireciona apos `response.ok`
+3. Verificar se nao ha erro antes do redirect
 
-### Telefone não valida / Bandeiras não aparecem
+### Parametros nao chegam na pagina de obrigado
 
-1. Verificar se CSS e JS do intl-tel-input carregaram
+1. Verificar se `action` esta definido no form (sem action = sem redirect)
+2. Verificar se campos `name="nome"` e `name="email"` existem no form
+3. Inspecionar a URL de redirect no DevTools Network
+
+### Telefone nao valida / Bandeiras nao aparecem
+
+1. Verificar se CSS e JS do intl-tel-input v24.6.0 carregaram
 2. Verificar console por erros de carregamento
+3. Verificar se `loadUtilsOnInit` esta com URL correta
