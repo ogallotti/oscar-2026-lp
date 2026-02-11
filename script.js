@@ -450,7 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       try {
-        const response = await fetch('/', {
+        const actionUrl = contactForm.getAttribute('action') || '/';
+        const response = await fetch(actionUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(formData).toString()

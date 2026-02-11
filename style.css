@@ -1353,6 +1353,10 @@ img {
   border-top-color: rgba(255, 255, 255, 0.4) !important;
 }
 
+.iti__selected-dial-code {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
 /* Form Feedback */
 .form-feedback {
   margin-bottom: 1rem;
